@@ -1,18 +1,9 @@
 ﻿using Microsoft.Win32;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CharacteristicPoints
 {
@@ -24,6 +15,7 @@ namespace CharacteristicPoints
         public MainWindow()
         {
             InitializeComponent();
+            
         }
 
         private void ExitButton(object sender, RoutedEventArgs e)
@@ -48,6 +40,15 @@ namespace CharacteristicPoints
                 upload.Visibility= Visibility.Hidden;
                 border.Visibility= Visibility.Visible;
             }
+        }
+
+        private void Coordionates(object sender, MouseButtonEventArgs e)
+        {
+            //UserImage.Source.Height Dodanie logiki wyswietlajacej pixele
+
+            var coords = e.GetPosition(UserImage);
+            posX.Text = "Positon X = " + Math.Round(coords.X, 3).ToString();
+            posY.Text = "Positon Y = " + Math.Round(coords.Y, 3).ToString();
         }
     }
 }

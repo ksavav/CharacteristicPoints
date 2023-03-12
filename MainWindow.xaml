@@ -3,7 +3,9 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:i="http://schemas.microsoft.com/expression/2010/interactivity"
         xmlns:local="clr-namespace:CharacteristicPoints"
+        xmlns:viewModel="clr-namespace:CharacteristicPoints.ViewModel"
         mc:Ignorable="d"
         WindowStyle="None"
         ResizeMode="NoResize"
@@ -53,34 +55,51 @@
 
             <!--> Buttons <-->
             <StackPanel Grid.Row="1">
-                <RadioButton Content="Home"
+                <RadioButton Content="Upload"
                              Height="50"
                              Foreground="Black"
                              FontSize="25"
-                             Style="{StaticResource MenuButtonTheme}"
-                             IsChecked="True"/>
-
-                <RadioButton Content="Upload file"
-                             Height="50"
+                             Style="{StaticResource MenuLableTheme}"/>
+                
+                <RadioButton Content="Upload image"
+                             Height="40"
                              Foreground="Black"
-                             FontSize="25"
+                             FontSize="23"
                              Style="{StaticResource MenuButtonTheme}"
                              Click="UploadImage"
                              Name="uploadButton"/>
 
-                <RadioButton Content="Button3"
+                <RadioButton Content="Upload XML file"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="23"
+                             Style="{StaticResource MenuButtonTheme}"/>
+                
+                <RadioButton Content="Download"
                              Height="50"
                              Foreground="Black"
                              FontSize="25"
-                             Style="{StaticResource MenuButtonTheme}"/>
+                             Style="{StaticResource MenuLableTheme}"/>
                 
+                <RadioButton Content="Download XML file"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="23"
+                             Style="{StaticResource MenuButtonTheme}"/>
+
+                <RadioButton Content="Download CSV file"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="23"
+                             Style="{StaticResource MenuButtonTheme}"/>
+
                 <RadioButton Content="Exit"
-                             Height="50"
+                             Height="40"
                              Foreground="Black"
                              Background="#EE856F"
                              FontSize="25"
                              Style="{StaticResource MenuButtonTheme}"
-                             Margin="0,600,0,0"
+                             Margin="0,500,0,0"
                              Click="ExitButton"/>
 
             </StackPanel>
@@ -167,16 +186,35 @@
                               Grid.Column="2" 
                               Grid.Row="1"
                               Visibility="Hidden">
+
                 <Image Grid.Column="2"
                        Grid.Row="1"
                        x:Name="UserImage"
                        Width="auto"
                        Height="auto"
-                       Margin="10, 10, 10, 40"/>
+                       Margin="10, 10, 10, 40"
+                       MouseLeftButtonDown="Coordionates"/>
+                
             </local:ZoomBorder>
 
+            <!--> Row 0 Column 2 <-->
 
-
+            <StackPanel Grid.Row="0"
+                        Grid.Column="2"
+                        Orientation="Vertical">
+                <TextBlock Text=""
+                           x:Name="posX"
+                           HorizontalAlignment="Left"
+                           Margin="40, 30, 0, 10"
+                           FontSize="20"
+                           FontFamily="#Roboto"/>
+                <TextBlock Text=""
+                           x:Name="posY"
+                           HorizontalAlignment="Left"
+                           Margin="40, 0, 0, 30"
+                           FontSize="20"
+                           FontFamily="#Roboto"/>
+            </StackPanel>
         </Grid>
 
 

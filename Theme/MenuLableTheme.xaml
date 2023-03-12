@@ -2,7 +2,7 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
     <Style BasedOn="{StaticResource {x:Type ToggleButton}}"
            TargetType="{x:Type RadioButton}"
-           x:Key="MenuButtonTheme">
+           x:Key="MenuLableTheme">
         <Style.Setters>
             <Setter Property="Template">
                 <Setter.Value>
@@ -13,10 +13,10 @@
 
                             <TextBlock Text="{TemplateBinding Property=Content}"
                                        VerticalAlignment="Center"
-                                       Margin="50,0,0,0"
+                                       Margin="30,0,0,0"
                                        FontFamily="/Fonts/#Roboto"
                                        FontWeight="Medium"/>
-                            
+
                         </Grid>
                     </ControlTemplate>
                 </Setter.Value>
@@ -25,11 +25,5 @@
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="BorderThickness" Value="0"/>
         </Style.Setters>
-
-        <Style.Triggers>
-            <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background" Value="Bisque"/>
-            </Trigger>
-        </Style.Triggers>
     </Style>
 </ResourceDictionary>
