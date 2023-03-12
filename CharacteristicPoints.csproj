@@ -1,0 +1,33 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net6.0-windows</TargetFramework>
+    <Nullable>enable</Nullable>
+    <UseWPF>true</UseWPF>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <None Remove="Images\logo_eti.png" />
+    <None Remove="Images\minus_icon.png" />
+    <None Remove="Images\plus_icon.png" />
+    <None Remove="Images\point_icon.png" />
+    <None Remove="Images\test.jpg" />
+    <None Remove="Images\upload_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="Fonts\" />
+    <Folder Include="Theme\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\logo_eti.png" />
+    <Resource Include="Images\minus_icon.png" />
+    <Resource Include="Images\plus_icon.png" />
+    <Resource Include="Images\point_icon.png" />
+    <Resource Include="Images\test.jpg" />
+    <Resource Include="Images\upload_icon.png" />
+  </ItemGroup>
+
+</Project>
