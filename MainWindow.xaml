@@ -126,7 +126,8 @@
             <!--> Function buttons <-->
             
             <StackPanel Orientation="Vertical"
-                    Grid.Column="3" Grid.Row="2">
+                    Grid.Column="3" Grid.Row="2"
+                        Background="#F2F8EC">
 
                 <Image Width="75"
                    Height="75"
@@ -170,7 +171,7 @@
 
             
             <!--> Center section <-->
-            
+            <Grid Grid.Row="1" Grid.Column="2" Background="#F2F8EC"/>
             <RadioButton Grid.Column ="2"
                          Grid.Row="1"
                          HorizontalAlignment="Center"
@@ -178,7 +179,9 @@
                          Style="{StaticResource UploadButtonTheme}"
                          Click="UploadImage"
                          Name="upload"
-                         Visibility ="Visible"/>
+                         Visibility ="Visible"
+                         />
+
 
             <local:ZoomBorder x:Name="border" 
                               ClipToBounds="True" 
@@ -194,7 +197,7 @@
                        Height="auto"
                        Margin="10, 10, 10, 40"
                        MouseLeftButtonDown="Coordionates"/>
-                
+
             </local:ZoomBorder>
 
             <!--> Row 0 Column 2 <-->
