@@ -14,8 +14,8 @@
 
     <Border Background="White">
         <Border.Clip>
-            <RectangleGeometry RadiusX="10"
-                               RadiusY="10"
+            <RectangleGeometry RadiusX="15"
+                               RadiusY="15"
                                Rect="0,0,1400,900"/>
         </Border.Clip>
 
@@ -30,6 +30,7 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="100"/>
                 <RowDefinition/>
+                <RowDefinition Height="100"/>
             </Grid.RowDefinitions>
 
 
@@ -60,7 +61,7 @@
                              Foreground="Black"
                              FontSize="25"
                              Style="{StaticResource MenuLableTheme}"/>
-                
+
                 <RadioButton Content="Upload image"
                              Height="40"
                              Foreground="Black"
@@ -74,13 +75,13 @@
                              Foreground="Black"
                              FontSize="23"
                              Style="{StaticResource MenuButtonTheme}"/>
-                
+
                 <RadioButton Content="Download"
                              Height="50"
                              Foreground="Black"
                              FontSize="25"
                              Style="{StaticResource MenuLableTheme}"/>
-                
+
                 <RadioButton Content="Download XML file"
                              Height="40"
                              Foreground="Black"
@@ -93,19 +94,21 @@
                              FontSize="23"
                              Style="{StaticResource MenuButtonTheme}"/>
 
-                <RadioButton Content="Exit"
+
+
+            </StackPanel>
+
+            <RadioButton Content="Exit"
                              Height="40"
                              Foreground="Black"
                              Background="#EE856F"
                              FontSize="25"
+                             Grid.Row="2"
                              Style="{StaticResource MenuButtonTheme}"
-                             Margin="0,500,0,0"
+                             Margin="0,60,0,0"
                              Click="ExitButton"/>
 
-            </StackPanel>
-
             <!--> Logo image <-->
-
             <Image Grid.Row ="0" 
                    Width="280"
                    Height="78.43"
@@ -124,9 +127,8 @@
 
 
             <!--> Function buttons <-->
-            
             <StackPanel Orientation="Vertical"
-                    Grid.Column="3" Grid.Row="2"
+                    Grid.Column="3" Grid.Row="1"
                         Background="#F2F8EC">
 
                 <Image Width="75"
@@ -134,29 +136,39 @@
                    Source="/Images/point_icon.png"
                    Margin="0,10,0,10"/>
 
-                <Image Width="75"
-                   Height="75"
-                   Source="/Images/plus_icon.png"
-                   Margin="0,10,0,10"/>
+                <Image Source="/Images/left_triangle_icon.png"
+                       Height="75"
+                       Width="75"
+                       Margin="0,10,0,10"
+                       MouseDown="MoveLeft"/>
 
-                <Image Width="75"
-                   Height="75"
-                   Source="/Images/minus_icon.png"
-                   Margin="0,10,0,10"/>
+                <Image Source="/Images/right_triangle_icon.png"
+                       Height="75"
+                       Width="75"
+                       Margin="0,10,0,10"
+                       MouseDown="MoveRight"/>
+
+                <Image Source="/Images/bin_icon.png"
+                       Height="75"
+                       Width="75"
+                       Margin="0,10,0,10"
+                       MouseDown="RemoveImage"/>
 
             </StackPanel>
 
             <!--> Points List <-->
-
             <StackPanel Orientation="Vertical" 
                         Grid.Column="1" 
-                        Grid.Row="2"
-                        Background="#F2F8EC">
+                        Grid.Row="1"
+                        Background="#F2F8EC"
+                        Name="listOfPoints">
                 <TextBlock Text="Points List"
                            HorizontalAlignment="Center"
                            Margin="0, 20, 0, 10"
-                           FontSize="25"
-                           FontFamily="/Fonts/#Roboto"/>
+                           FontSize="23"
+                           FontFamily="/Fonts/#Roboto"
+                           Visibility="Visible"
+                           Name="PlaceHolder"/>
             </StackPanel>
 
             <Border BorderThickness="0 0 2 0" 
@@ -169,7 +181,12 @@
                     Grid.Column ="3"
                     Grid.Row="1"/>
 
-            
+            <Border BorderThickness="0 2 0 0" 
+                    BorderBrush="Black"
+                    Grid.Column ="2"
+                    Grid.Row="2"/>
+
+
             <!--> Center section <-->
             <Grid Grid.Row="1" Grid.Column="2" Background="#F2F8EC"/>
             <RadioButton Grid.Column ="2"
@@ -196,21 +213,23 @@
                        Width="auto"
                        Height="auto"
                        Margin="10, 10, 10, 40"
-                       MouseLeftButtonDown="Coordionates"/>
+                       MouseLeftButtonDown="SetIndex"/>
 
             </local:ZoomBorder>
 
             <!--> Row 0 Column 2 <-->
-
+            <Grid Grid.Row="0" Grid.Column="2" MouseDown="DragWindow"/>
             <StackPanel Grid.Row="0"
                         Grid.Column="2"
                         Orientation="Vertical">
+
                 <TextBlock Text=""
                            x:Name="posX"
                            HorizontalAlignment="Left"
                            Margin="40, 30, 0, 10"
                            FontSize="20"
                            FontFamily="#Roboto"/>
+
                 <TextBlock Text=""
                            x:Name="posY"
                            HorizontalAlignment="Left"
@@ -218,8 +237,13 @@
                            FontSize="20"
                            FontFamily="#Roboto"/>
             </StackPanel>
+
+            <StackPanel Grid.Row="2" 
+                        Grid.Column ="2"
+                        Orientation="Horizontal"
+                        Name="ImageGallery">
+
+            </StackPanel>
         </Grid>
-
-
     </Border>
 </Window>
