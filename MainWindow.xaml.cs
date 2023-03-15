@@ -1,6 +1,7 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -14,11 +15,14 @@ namespace CharacteristicPoints
     public partial class MainWindow : Window
     {
         public List<ImageToIndex> ListOfImages = new List<ImageToIndex>();
+        public Dictionary<TextBlock, RadioButton> PointsDelDictionary = new Dictionary<TextBlock, RadioButton>();
+        public Dictionary<TextBlock, RadioButton> PointsRenameDictionary = new Dictionary<TextBlock, RadioButton>();
+
         int _currentImage = 0;
         public MainWindow()
         {
             InitializeComponent();
-            
+
         }
 
         private void ExitButton(object sender, RoutedEventArgs e)
@@ -45,13 +49,13 @@ namespace CharacteristicPoints
                 NewImage.ImageHeight = NewImage.Image.Height;
                 NewImage.ImageWidth = NewImage.Image.Width;
 
-                if(ListOfImages.Count == 0)
+                if (ListOfImages.Count == 0)
                 {
                     UserImage.Source = NewImage.Image;
                 }
 
-                upload.Visibility= Visibility.Hidden;
-                border.Visibility= Visibility.Visible;
+                upload.Visibility = Visibility.Hidden;
+                border.Visibility = Visibility.Visible;
             }
 
             ListOfImages.Add(NewImage);
@@ -61,12 +65,14 @@ namespace CharacteristicPoints
         private void CreateImageList()
         {
             ImageGallery.Children.Clear();
-            foreach(var i in ListOfImages)
+            foreach (var i in ListOfImages)
             {
-                Image x = new Image {
+                Image x = new Image
+                {
                     Source = i.Image,
                     Margin = new Thickness(10, 10, 10, 10),
-                    Width = 80};
+                    Width = 80
+                };
 
                 ImageGallery.Children.Add(x);
             }
@@ -83,7 +89,7 @@ namespace CharacteristicPoints
 
         private void MoveLeft(object sender, MouseButtonEventArgs e)
         {
-            if(_currentImage != 0)
+            if (_currentImage != 0)
             {
                 _currentImage--;
                 UserImage.Source = ListOfImages[_currentImage].Image;
@@ -105,7 +111,7 @@ namespace CharacteristicPoints
 
         private void RemoveImage(object sender, MouseButtonEventArgs e)
         {
-            if(ListOfImages.Count != 1)
+            if (ListOfImages.Count != 1)
             {
                 ListOfImages.Remove(ListOfImages[_currentImage]);
 
@@ -115,7 +121,7 @@ namespace CharacteristicPoints
                     UserImage.Source = ListOfImages[_currentImage].Image;
                 }
 
-                if(ListOfImages.Count == 1)
+                if (ListOfImages.Count == 1)
                 {
                     _currentImage = 0;
                     UserImage.Source = ListOfImages[_currentImage].Image;
@@ -137,11 +143,13 @@ namespace CharacteristicPoints
         public void CreatePointsList()
         {
             listOfPoints.Children.Clear();
-            var counter = 0;
+            var counter = 1;
             PlaceHolder.Visibility = Visibility.Hidden;
+
             foreach (var i in ListOfImages[_currentImage].Points)
             {
-                if(counter == 0)
+
+                if (counter == 0)
                 {
                     TextBlock lable = new TextBlock
                     {
@@ -156,15 +164,71 @@ namespace CharacteristicPoints
 
                 TextBlock x = new TextBlock
                 {
-                    Text = $"Point {counter + 1}: \n PosX = {Math.Round(i.X, 3)} \n PosY = {Math.Round(i.Y, 3)}",
+                    Name = "Point" + counter.ToString(),
+                    Text = $"Point {counter}: \n PosX = {Math.Round(i.X, 3)} \n PosY = {Math.Round(i.Y, 3)}",
                     Margin = new Thickness(10, 10, 0, 10),
                     FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
                     FontSize = 18
                 };
 
                 listOfPoints.Children.Add(x);
+
+
+
+                PointsDelDictionary.Add(x, pointDelButtonCreator(counter));
+                PointsRenameDictionary.Add(x, pointRenameButtonCreator(counter));
                 counter++;
             }
+        }
+
+        public RadioButton pointDelButtonCreator(int pointNumber)
+        {
+            RadioButton delButton = new RadioButton
+            {
+                Name = "delButton" + pointNumber.ToString(),
+                Content = "Delete"
+            };
+
+            delButton.Click += new RoutedEventHandler(DeletePoint);
+            listOfPoints.Children.Add(delButton);
+
+            return delButton;
+        }
+
+        public RadioButton pointRenameButtonCreator(int pointNumber)
+        {
+            RadioButton renameButton = new RadioButton
+            {
+                Name = "renameButton" + pointNumber.ToString(),
+                Content = "Rename"
+            };
+
+            renameButton.Click += new RoutedEventHandler(RenamePoint);
+            listOfPoints.Children.Add(renameButton);
+
+            return renameButton;
+        }
+
+        private void DeletePoint(object sender, RoutedEventArgs e)
+        {
+            RadioButton srcButton = e.Source as RadioButton;
+
+            var textBlockKey = PointsDelDictionary.FirstOrDefault(x => x.Value == srcButton).Key;
+            var elementToDel = Int32.Parse(textBlockKey.Name.Substring(Math.Max(0, textBlockKey.Name.Length - 1)));
+
+            listOfPoints.Children.Remove(textBlockKey);
+            listOfPoints.Children.Remove(srcButton);
+            listOfPoints.Children.Remove(PointsRenameDictionary[key: textBlockKey]);
+            ListOfImages[_currentImage].Points.RemoveAt(elementToDel - 1);
+        }
+
+        private void RenamePoint(object sender, RoutedEventArgs e)
+        {
+            RadioButton srcButton = e.Source as RadioButton;
+
+            var textBlockKey = PointsRenameDictionary.FirstOrDefault(x => x.Value == srcButton).Key;
+
+            PointsRenameDictionary[key: textBlockKey].Name = "xd";
         }
     }
 }
