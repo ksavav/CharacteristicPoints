@@ -15,8 +15,9 @@ namespace CharacteristicPoints
     public partial class MainWindow : Window
     {
         public List<ImageToIndex> ListOfImages = new List<ImageToIndex>();
-        public Dictionary<TextBlock, RadioButton> PointsDelDictionary = new Dictionary<TextBlock, RadioButton>();
-        public Dictionary<TextBlock, RadioButton> PointsRenameDictionary = new Dictionary<TextBlock, RadioButton>();
+        public List<RadioButton> PointsDelList = new List<RadioButton>();
+        public List<RadioButton> PointsRenameList = new List<RadioButton>();
+        public List<TextBlock> PointsTextList = new List<TextBlock>();
 
         int _currentImage = 0;
         public MainWindow()
@@ -143,6 +144,10 @@ namespace CharacteristicPoints
         public void CreatePointsList()
         {
             listOfPoints.Children.Clear();
+            PointsTextList.Clear();
+            PointsDelList.Clear();
+            PointsRenameList.Clear();
+
             var counter = 1;
             PlaceHolder.Visibility = Visibility.Hidden;
 
@@ -174,9 +179,9 @@ namespace CharacteristicPoints
                 listOfPoints.Children.Add(x);
 
 
-
-                PointsDelDictionary.Add(x, pointDelButtonCreator(counter));
-                PointsRenameDictionary.Add(x, pointRenameButtonCreator(counter));
+                PointsTextList.Add(x);
+                PointsDelList.Add(pointDelButtonCreator(counter));
+                PointsRenameList.Add(pointRenameButtonCreator(counter));
                 counter++;
             }
         }
@@ -213,22 +218,25 @@ namespace CharacteristicPoints
         {
             RadioButton srcButton = e.Source as RadioButton;
 
-            var textBlockKey = PointsDelDictionary.FirstOrDefault(x => x.Value == srcButton).Key;
-            var elementToDel = Int32.Parse(textBlockKey.Name.Substring(Math.Max(0, textBlockKey.Name.Length - 1)));
+            var elementToDel = PointsDelList.FindIndex(a => a.Name == srcButton.Name);
 
-            listOfPoints.Children.Remove(textBlockKey);
+            listOfPoints.Children.Remove(PointsTextList[elementToDel]);
             listOfPoints.Children.Remove(srcButton);
-            listOfPoints.Children.Remove(PointsRenameDictionary[key: textBlockKey]);
-            ListOfImages[_currentImage].Points.RemoveAt(elementToDel - 1);
+            listOfPoints.Children.Remove(PointsRenameList[elementToDel]);
+            ListOfImages[_currentImage].Points.RemoveAt(elementToDel);
+
+            PointsTextList.RemoveAt(elementToDel);
+            PointsDelList.RemoveAt(elementToDel);
+            PointsRenameList.RemoveAt(elementToDel);
         }
 
         private void RenamePoint(object sender, RoutedEventArgs e)
         {
             RadioButton srcButton = e.Source as RadioButton;
 
-            var textBlockKey = PointsRenameDictionary.FirstOrDefault(x => x.Value == srcButton).Key;
+            var elementToRename = PointsDelList.FindIndex(a => a.Name == srcButton.Name);
 
-            PointsRenameDictionary[key: textBlockKey].Name = "xd";
+            PointsTextList[elementToRename - 1].Text = "xd";
         }
     }
 }
