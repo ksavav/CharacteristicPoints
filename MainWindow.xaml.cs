@@ -18,7 +18,7 @@ namespace CharacteristicPoints
         public List<RadioButton> PointsDelList = new List<RadioButton>();
         public List<RadioButton> PointsRenameList = new List<RadioButton>();
         public List<TextBlock> PointsTextList = new List<TextBlock>();
-
+        bool flag = false;
         int _currentImage = 0;
         public MainWindow()
         {
@@ -135,10 +135,13 @@ namespace CharacteristicPoints
 
         private void SetIndex(object sender, MouseButtonEventArgs e)
         {
-            var coords = e.GetPosition(UserImage);
-            ListOfImages[_currentImage].Points.Add(coords);
+            if(flag == true)
+            {
+                var coords = e.GetPosition(UserImage);
+                ListOfImages[_currentImage].Points.Add(coords);
 
-            CreatePointsList();
+                CreatePointsList();
+            }
         }
 
         public void CreatePointsList()
@@ -234,9 +237,15 @@ namespace CharacteristicPoints
         {
             RadioButton srcButton = e.Source as RadioButton;
 
-            var elementToRename = PointsDelList.FindIndex(a => a.Name == srcButton.Name);
+            var elementToRename = PointsRenameList.FindIndex(a => a.Name == srcButton.Name);
 
-            PointsTextList[elementToRename - 1].Text = "xd";
+            PointsTextList[elementToRename].Text = "xd";
+        }
+
+        private void AddPoints(object sender, MouseButtonEventArgs e)
+        {
+            if (flag == false) flag = true;
+            else flag = false;
         }
     }
 }
