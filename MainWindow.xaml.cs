@@ -1,4 +1,5 @@
-﻿using Microsoft.Win32;
+﻿using CharacteristicPoints.DialogWindow;
+using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -281,10 +282,14 @@ namespace CharacteristicPoints
         private void RenamePoint(object sender, RoutedEventArgs e)
         {
             RadioButton srcButton = e.Source as RadioButton;
+            var dialog = new UserInput();
 
             var elementToRename = ListOfImages[_currentImage].PointsOfImage.renameButtons.FindIndex(a => a.Name == srcButton.Name);
 
-            ListOfImages[_currentImage].PointsOfImage.pointTexts[elementToRename].Text = "xd";
+            if (dialog.ShowDialog() == true)
+            {
+                ListOfImages[_currentImage].PointsOfImage.pointTexts[elementToRename].Text = dialog.NewNameForPoint;
+            }
         }
 
         private void AddPoints(object sender, MouseButtonEventArgs e)

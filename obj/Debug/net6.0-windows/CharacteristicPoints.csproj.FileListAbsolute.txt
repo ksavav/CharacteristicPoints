@@ -25,3 +25,5 @@ E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\ref\Charac
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\MenuLableTheme.baml
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\PointButtonTheme.baml
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\UserInput.g.cs
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\UserInput.baml
