@@ -5,6 +5,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Media.Imaging;
 
 namespace CharacteristicPoints
@@ -18,11 +19,11 @@ namespace CharacteristicPoints
 
         bool flag = false;
         int _currentImage = 0;
-        
+        int maxSizeOfImageGallery = 7;
+
         public MainWindow()
         {
             InitializeComponent();
-
         }
 
         private void ExitButton(object sender, RoutedEventArgs e)
@@ -59,23 +60,50 @@ namespace CharacteristicPoints
             }
 
             ListOfImages.Add(NewImage);
-            CreateImageList();
+            CreateImageList_event();
         }
 
-        private void CreateImageList()
+        private void CreateImageList_event()
         {
             ImageGallery.Children.Clear();
-            // zamiana na fora, żeby w przypadku większej ilości zdjęć nie zmieniały się w zależności od current image
-            foreach (var i in ListOfImages)
+
+            if (ListOfImages.Count <= maxSizeOfImageGallery) CreateImageList(0, ListOfImages.Count);
+
+            else if (ListOfImages.Count > maxSizeOfImageGallery && _currentImage < 4) 
+                CreateImageList(0, maxSizeOfImageGallery);
+
+            else if (ListOfImages.Count > maxSizeOfImageGallery && _currentImage > ListOfImages.Count - 4) 
+                CreateImageList(ListOfImages.Count - maxSizeOfImageGallery, ListOfImages.Count);
+
+            else CreateImageList(_currentImage - 3, _currentImage + 4);
+        }
+
+        public void CreateImageList(int starting_point, int ending_point)
+        {
+            for (int i = starting_point; i < ending_point; i++)
             {
                 Image x = new Image
                 {
-                    Source = i.Image,
+                    Source = ListOfImages[i].Image,
                     Margin = new Thickness(10, 10, 10, 10),
                     Width = 80
                 };
 
-                ImageGallery.Children.Add(x);
+                if (i == _currentImage)
+                {
+                    Border currentImageBorder = new Border
+                    {
+                        BorderThickness = new Thickness(5),
+                        BorderBrush = Brushes.Red,
+                        Margin = new Thickness(10, 10, 10, 10),
+                        CornerRadius = new CornerRadius(10)
+                    };
+
+                    currentImageBorder.Child = x;
+                    ImageGallery.Children.Add(currentImageBorder);
+                }
+
+                else ImageGallery.Children.Add(x);
             }
         }
 
@@ -95,7 +123,7 @@ namespace CharacteristicPoints
                 _currentImage--;
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
-
+            CreateImageList_event();
             DisplayPointsList();
         }
 
@@ -106,7 +134,7 @@ namespace CharacteristicPoints
                 _currentImage++;
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
-
+            CreateImageList_event();
             DisplayPointsList();
         }
 
@@ -128,7 +156,7 @@ namespace CharacteristicPoints
                     UserImage.Source = ListOfImages[_currentImage].Image;
                 }
 
-                CreateImageList();
+                CreateImageList_event();
                 DisplayPointsList();
             }
         }
@@ -195,8 +223,6 @@ namespace CharacteristicPoints
                 FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
                 FontSize = 18,
             };
-
-            //listOfPoints.Children.Add(x);
 
             ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(x);
             ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coords);
@@ -269,7 +295,6 @@ namespace CharacteristicPoints
 
 
         /* TODO
-         * 
          * Dodanie okna dialogowego do zmiany nazwy.
          */
     }
