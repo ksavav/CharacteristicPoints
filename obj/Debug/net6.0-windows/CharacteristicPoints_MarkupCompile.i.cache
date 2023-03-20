@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 E:\Programowanie\CSharp\CharacteristicPoints\App.xaml
-51420273515
+5-64912727
 
-9-433566196
+9-1025715036
 194-2004305220
-MainWindow.xaml;Theme\MenuButtonTheme.xaml;Theme\MenuLableTheme.xaml;Theme\SubMenuButtonTheme.xaml;Theme\UploadButtonTheme.xaml;
+MainWindow.xaml;Theme\MenuButtonTheme.xaml;Theme\MenuLableTheme.xaml;Theme\PointButtonTheme.xaml;Theme\UploadButtonTheme.xaml;
 
-True
+False
 

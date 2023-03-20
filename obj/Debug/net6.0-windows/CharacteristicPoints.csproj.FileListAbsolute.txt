@@ -5,7 +5,6 @@ E:\Programowanie\CSharp\CharacteristicPoints\bin\Debug\net6.0-windows\Characteri
 E:\Programowanie\CSharp\CharacteristicPoints\bin\Debug\net6.0-windows\CharacteristicPoints.pdb
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\CharacteristicPoints.csproj.AssemblyReference.cache
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\MenuButtonTheme.baml
-E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\SubMenuButtonTheme.baml
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\UploadButtonTheme.baml
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\MainWindow.g.cs
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\App.g.cs
@@ -25,3 +24,4 @@ E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Characteri
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\ref\CharacteristicPoints.dll
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\GeneratedInternalTypeHelper.g.cs
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\MenuLableTheme.baml
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\PointButtonTheme.baml

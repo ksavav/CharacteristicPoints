@@ -14,5 +14,6 @@ namespace CharacteristicPoints
         public double ImageHeight { get; set; }
         public double ImageWidth { get; set; }
         public List<System.Windows.Point> Points { get; set; } = new List<System.Windows.Point>();
+        public PointsOfImage PointsOfImage { get; set; } = new PointsOfImage();
     }
 }

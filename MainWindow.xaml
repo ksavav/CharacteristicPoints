@@ -211,8 +211,7 @@
                 <Image Grid.Column="2"
                        Grid.Row="1"
                        x:Name="UserImage"
-                       Width="auto"
-                       Height="auto"
+                       Stretch="Uniform"
                        Margin="10, 10, 10, 40"
                        MouseLeftButtonDown="SetIndex"/>
 

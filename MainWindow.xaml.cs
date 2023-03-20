@@ -15,11 +15,10 @@ namespace CharacteristicPoints
     public partial class MainWindow : Window
     {
         public List<ImageToIndex> ListOfImages = new List<ImageToIndex>();
-        public List<RadioButton> PointsDelList = new List<RadioButton>();
-        public List<RadioButton> PointsRenameList = new List<RadioButton>();
-        public List<TextBlock> PointsTextList = new List<TextBlock>();
+
         bool flag = false;
         int _currentImage = 0;
+        
         public MainWindow()
         {
             InitializeComponent();
@@ -66,6 +65,7 @@ namespace CharacteristicPoints
         private void CreateImageList()
         {
             ImageGallery.Children.Clear();
+            // zamiana na fora, żeby w przypadku większej ilości zdjęć nie zmieniały się w zależności od current image
             foreach (var i in ListOfImages)
             {
                 Image x = new Image
@@ -96,7 +96,7 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
 
-            CreatePointsList();
+            DisplayPointsList();
         }
 
         private void MoveRight(object sender, MouseButtonEventArgs e)
@@ -107,7 +107,7 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
 
-            CreatePointsList();
+            DisplayPointsList();
         }
 
         private void RemoveImage(object sender, MouseButtonEventArgs e)
@@ -129,7 +129,7 @@ namespace CharacteristicPoints
                 }
 
                 CreateImageList();
-                CreatePointsList();
+                DisplayPointsList();
             }
         }
 
@@ -144,24 +144,18 @@ namespace CharacteristicPoints
             }
         }
 
-        public void CreatePointsList()
+        public void DisplayPointsList()
         {
+
             listOfPoints.Children.Clear();
-            PointsTextList.Clear();
-            PointsDelList.Clear();
-            PointsRenameList.Clear();
 
-            var counter = 1;
-            PlaceHolder.Visibility = Visibility.Hidden;
-
-            foreach (var i in ListOfImages[_currentImage].Points)
+            for (int i = 0; i < ListOfImages[_currentImage].Points.Count; i++)
             {
-
-                if (counter == 0)
+                if (i == 0)
                 {
                     TextBlock lable = new TextBlock
                     {
-                        Text = "Points list:",
+                        Text = "Points list:", // + UserImage.Height.ToString() + UserImage.Width.ToString(),
                         Margin = new Thickness(10, 10, 0, 10),
                         FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
                         FontSize = 20
@@ -170,23 +164,45 @@ namespace CharacteristicPoints
                     listOfPoints.Children.Add(lable);
                 }
 
-                TextBlock x = new TextBlock
-                {
-                    Name = "Point" + counter.ToString(),
-                    Text = $"Point {counter}: \n PosX = {Math.Round(i.X, 3)} \n PosY = {Math.Round(i.Y, 3)}",
-                    Margin = new Thickness(10, 10, 0, 10),
-                    FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
-                    FontSize = 18
-                };
+                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointTexts[i]);
+                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointCoordinates[i]);
+                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.delButtons[i]);
+                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.renameButtons[i]);
+            }   
+        }       
 
-                listOfPoints.Children.Add(x);
+        public void CreatePointsList()
+        {
+            PlaceHolder.Visibility = Visibility.Hidden;
 
+            var new_point = ListOfImages[_currentImage].Points.Count - 1;
 
-                PointsTextList.Add(x);
-                PointsDelList.Add(pointDelButtonCreator(counter));
-                PointsRenameList.Add(pointRenameButtonCreator(counter));
-                counter++;
-            }
+            TextBlock x = new TextBlock
+            {
+                Name = "Point" + (new_point + 1).ToString(),
+                Text = $"Point {new_point + 1}",
+                Margin = new Thickness(10, 10, 0, 10),
+                FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
+                FontSize = 18,
+            };
+
+            TextBlock coords = new TextBlock
+            {
+                Name = "Coords" + (new_point + 1).ToString(),
+                Text = $"PosX = {Math.Round(ListOfImages[_currentImage].Points[new_point].X, 3)}\n" +
+                       $"PosY = {Math.Round(ListOfImages[_currentImage].Points[new_point].Y, 3)}",
+                Margin = new Thickness(10, 10, 0, 10),
+                FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
+                FontSize = 18,
+            };
+
+            //listOfPoints.Children.Add(x);
+
+            ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(x);
+            ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coords);
+            ListOfImages[_currentImage].PointsOfImage.delButtons.Add(pointDelButtonCreator(new_point + 1));
+            ListOfImages[_currentImage].PointsOfImage.renameButtons.Add(pointRenameButtonCreator(new_point + 1));
+            DisplayPointsList();
         }
 
         public RadioButton pointDelButtonCreator(int pointNumber)
@@ -194,11 +210,12 @@ namespace CharacteristicPoints
             RadioButton delButton = new RadioButton
             {
                 Name = "delButton" + pointNumber.ToString(),
-                Content = "Delete"
+                Content = "Delete",
+                Style = (Style)FindResource("PointButtonTheme")
             };
 
             delButton.Click += new RoutedEventHandler(DeletePoint);
-            listOfPoints.Children.Add(delButton);
+            //listOfPoints.Children.Add(delButton);
 
             return delButton;
         }
@@ -208,11 +225,11 @@ namespace CharacteristicPoints
             RadioButton renameButton = new RadioButton
             {
                 Name = "renameButton" + pointNumber.ToString(),
-                Content = "Rename"
+                Content = "Rename",
+                Style = (Style)FindResource("PointButtonTheme")
             };
 
             renameButton.Click += new RoutedEventHandler(RenamePoint);
-            listOfPoints.Children.Add(renameButton);
 
             return renameButton;
         }
@@ -221,25 +238,27 @@ namespace CharacteristicPoints
         {
             RadioButton srcButton = e.Source as RadioButton;
 
-            var elementToDel = PointsDelList.FindIndex(a => a.Name == srcButton.Name);
+            var elementToDel = ListOfImages[_currentImage].PointsOfImage.delButtons.FindIndex(a => a.Name == srcButton.Name);
 
-            listOfPoints.Children.Remove(PointsTextList[elementToDel]);
+            listOfPoints.Children.Remove(ListOfImages[_currentImage].PointsOfImage.pointTexts[elementToDel]);
+            listOfPoints.Children.Remove(ListOfImages[_currentImage].PointsOfImage.pointCoordinates[elementToDel]);
             listOfPoints.Children.Remove(srcButton);
-            listOfPoints.Children.Remove(PointsRenameList[elementToDel]);
+            listOfPoints.Children.Remove(ListOfImages[_currentImage].PointsOfImage.renameButtons[elementToDel]);
             ListOfImages[_currentImage].Points.RemoveAt(elementToDel);
 
-            PointsTextList.RemoveAt(elementToDel);
-            PointsDelList.RemoveAt(elementToDel);
-            PointsRenameList.RemoveAt(elementToDel);
+            ListOfImages[_currentImage].PointsOfImage.pointTexts.RemoveAt(elementToDel);
+            ListOfImages[_currentImage].PointsOfImage.pointCoordinates.RemoveAt(elementToDel);
+            ListOfImages[_currentImage].PointsOfImage.delButtons.RemoveAt(elementToDel);
+            ListOfImages[_currentImage].PointsOfImage.renameButtons.RemoveAt(elementToDel);
         }
 
         private void RenamePoint(object sender, RoutedEventArgs e)
         {
             RadioButton srcButton = e.Source as RadioButton;
 
-            var elementToRename = PointsRenameList.FindIndex(a => a.Name == srcButton.Name);
+            var elementToRename = ListOfImages[_currentImage].PointsOfImage.renameButtons.FindIndex(a => a.Name == srcButton.Name);
 
-            PointsTextList[elementToRename].Text = "xd";
+            ListOfImages[_currentImage].PointsOfImage.pointTexts[elementToRename].Text = "xd";
         }
 
         private void AddPoints(object sender, MouseButtonEventArgs e)
@@ -247,5 +266,11 @@ namespace CharacteristicPoints
             if (flag == false) flag = true;
             else flag = false;
         }
+
+
+        /* TODO
+         * 
+         * Dodanie okna dialogowego do zmiany nazwy.
+         */
     }
 }
