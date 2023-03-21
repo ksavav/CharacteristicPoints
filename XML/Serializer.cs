@@ -14,7 +14,7 @@ namespace CharacteristicPoints.XML
         public void Save(string fileName, List<ImageToIndex> ListOfImages)
         {
             XDocument newXmlFile = new XDocument(
-                new XElement("Root", 
+                new XElement("Images", 
                 from image in ListOfImages 
                 select new XElement("Image",
                     new XElement("FilePath", image.Image.ToString()),
