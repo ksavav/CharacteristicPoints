@@ -1,4 +1,5 @@
 ﻿using CharacteristicPoints.DialogWindow;
+using CharacteristicPoints.XML;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
@@ -296,6 +297,12 @@ namespace CharacteristicPoints
         {
             if (flag == false) flag = true;
             else flag = false;
+        }
+
+        private void SerializeToXML(object sender, RoutedEventArgs e)
+        {
+            var ser = new Serializer();
+            ser.Save("xd.xml", ListOfImages);
         }
 
 
