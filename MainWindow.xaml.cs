@@ -49,20 +49,24 @@ namespace CharacteristicPoints
             if (od.ShowDialog() == true)
             {
                 NewImage.Image = new BitmapImage(new Uri(od.FileName));
-                NewImage.ImageHeight = NewImage.Image.Height;
-                NewImage.ImageWidth = NewImage.Image.Width;
 
-                if (ListOfImages.Count == 0)
+                if(NewImage.Image != null)
                 {
-                    UserImage.Source = NewImage.Image;
-                }
+                    NewImage.ImageHeight = NewImage.Image.Height;
+                    NewImage.ImageWidth = NewImage.Image.Width;
 
-                upload.Visibility = Visibility.Hidden;
-                border.Visibility = Visibility.Visible;
+                    if (ListOfImages.Count == 0)
+                    {
+                        UserImage.Source = NewImage.Image;
+                    }
+
+                    upload.Visibility = Visibility.Hidden;
+                    border.Visibility = Visibility.Visible;
+
+                    ListOfImages.Add(NewImage);
+                    CreateImageList_event();
+                } 
             }
-
-            ListOfImages.Add(NewImage);
-            CreateImageList_event();
         }
 
         private void CreateImageList_event()
@@ -299,15 +303,38 @@ namespace CharacteristicPoints
             else flag = false;
         }
 
-        private void SerializeToXML(object sender, RoutedEventArgs e)
+        private void SerializeToXml(object sender, RoutedEventArgs e)
         {
             var ser = new Serializer();
             ser.Save("xd.xml", ListOfImages);
         }
 
+        private void DeserializeFromXml(object sender, RoutedEventArgs e)
+        {
+            var deser = new Deserializer();
+
+            OpenFileDialog od = new OpenFileDialog();
+            od.Filter = "Image files|*.xml";
+            od.FilterIndex = 1;
+            var path = "";
+
+            if (od.ShowDialog() == true)
+            {
+                path = od.FileName;
+            }
+
+            var images_from_xml = deser.Load(path);
+
+            CreateImagesFromXmlFile(images_from_xml);
+        }
+
+        private void CreateImagesFromXmlFile(List<List<string>> list)
+        {
+
+        }
 
         /* TODO
-         * Dodanie okna dialogowego do zmiany nazwy.
+         * ograniecie deserializera
          */
     }
 }

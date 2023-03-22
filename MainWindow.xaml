@@ -74,6 +74,7 @@
                              Height="40"
                              Foreground="Black"
                              FontSize="23"
+                             Click="DeserializeFromXml"
                              Style="{StaticResource MenuButtonTheme}"/>
 
                 <RadioButton Content="Download"
@@ -86,7 +87,7 @@
                              Height="40"
                              Foreground="Black"
                              FontSize="23"
-                             Click="SerializeToXML"
+                             Click="SerializeToXml"
                              Style="{StaticResource MenuButtonTheme}"/>
 
                 <RadioButton Content="Download CSV file"
