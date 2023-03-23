@@ -172,6 +172,7 @@ namespace CharacteristicPoints
             if(flag == true)
             {
                 var coords = e.GetPosition(UserImage);
+                coords = GetRealPoint(coords);
                 ListOfImages[_currentImage].Points.Add(coords);
 
                 CreatePointsList();
@@ -211,18 +212,6 @@ namespace CharacteristicPoints
 
             var new_point = ListOfImages[_currentImage].Points.Count - 1;
 
-            
-
-            TextBlock coords = new TextBlock
-            {
-                Name = "Coords" + (new_point + 1).ToString(),
-                Text = $"PosX = {Math.Round(ListOfImages[_currentImage].Points[new_point].X, 3)}\n" +
-                       $"PosY = {Math.Round(ListOfImages[_currentImage].Points[new_point].Y, 3)}",
-                Margin = new Thickness(10, 10, 0, 10),
-                FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
-                FontSize = 18,
-            };
-
             ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(pointNameTextBlockCreator("Point" + (new_point + 1).ToString()));
             ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Math.Round(ListOfImages[_currentImage].Points[new_point].X, 3), Math.Round(ListOfImages[_currentImage].Points[new_point].Y, 3)));
             ListOfImages[_currentImage].PointsOfImage.delButtons.Add(pointDelButtonCreator(new_point + 1));
@@ -236,7 +225,7 @@ namespace CharacteristicPoints
             {
                 //Name = "Coords" + (new_point + 1).ToString(),
                 Text = $"PosX = {x}\n" +
-                       $"PosY = {y}",
+                       $"PosY = {y}\n", //+ UserImage.Width + "\n" + UserImage.Height + "\n" + ListOfImages[_currentImage].ImageWidth + "\n" + ListOfImages[_currentImage].ImageHeight + "\n" + test.X + "\n" + test.Y,
                 Margin = new Thickness(10, 10, 0, 10),
                 FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
                 FontSize = 18,
@@ -324,7 +313,13 @@ namespace CharacteristicPoints
         private void SerializeToXml(object sender, RoutedEventArgs e)
         {
             var ser = new Serializer();
-            ser.Save("xd.xml", ListOfImages);
+            ser.SaveToXml("xdxml", ListOfImages);
+        }
+
+        private void SerializeToCsv(object sender, RoutedEventArgs e)
+        {
+            var ser = new Serializer();
+            ser.SaveToCsv("xdcsv", ListOfImages);
         }
 
         private void DeserializeFromXml(object sender, RoutedEventArgs e)
@@ -344,8 +339,6 @@ namespace CharacteristicPoints
             var images_from_xml = deser.Load(path);
 
             CreateImagesFromXmlFile(images_from_xml);
-
-            
         }
 
         private void CreateImagesFromXmlFile(List<List<string>> list)
@@ -377,10 +370,31 @@ namespace CharacteristicPoints
                 ListOfImages.Add(newImage);
             }
 
+            _currentImage = 0;
             CreateImageList_event();
             DisplayPointsList();
         }
 
+        
+        public Point GetRealPoint(Point pointFromCanvas)
+        {
+            double canvasWidth;
+            double canvasHeight;
+            if (ListOfImages[_currentImage].ImageWidth > ListOfImages[_currentImage].ImageHeight)
+            {
+                canvasWidth = UserImage.Width;
+                canvasHeight = ListOfImages[_currentImage].ImageHeight / (ListOfImages[_currentImage].ImageWidth / UserImage.Width);
+            }
+
+            else
+            {
+                canvasHeight = UserImage.Height;
+                canvasWidth = ListOfImages[_currentImage].ImageWidth / (ListOfImages[_currentImage].ImageHeight / UserImage.Height);
+            }
+
+            return (new Point(pointFromCanvas.X * ListOfImages[_currentImage].ImageWidth / canvasWidth, 
+                pointFromCanvas.Y * ListOfImages[_currentImage].ImageHeight / canvasHeight));
+        }
         /* TODO
          * ograniecie deserializera
          */

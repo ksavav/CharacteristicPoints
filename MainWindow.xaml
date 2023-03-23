@@ -94,6 +94,7 @@
                              Height="40"
                              Foreground="Black"
                              FontSize="23"
+                             Click="SerializeToCsv"
                              Style="{StaticResource MenuButtonTheme}"/>
 
 
@@ -209,13 +210,13 @@
                               Grid.Column="2" 
                               Grid.Row="1"
                               Visibility="Hidden">
-
-                <Image Grid.Column="2"
-                       Grid.Row="1"
-                       x:Name="UserImage"
-                       Stretch="Uniform"
-                       Margin="10, 10, 10, 40"
-                       MouseLeftButtonDown="SetIndex"/>
+                    <Image Grid.Column="2"
+                           Grid.Row="1"
+                           x:Name="UserImage"
+                           Width="800"
+                           Height="700"
+                           Stretch="Uniform"
+                           MouseLeftButtonDown="SetIndex"/>
 
             </local:ZoomBorder>
 
