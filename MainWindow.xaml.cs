@@ -211,14 +211,7 @@ namespace CharacteristicPoints
 
             var new_point = ListOfImages[_currentImage].Points.Count - 1;
 
-            TextBlock x = new TextBlock
-            {
-                Name = "Point" + (new_point + 1).ToString(),
-                Text = $"Point {new_point + 1}",
-                Margin = new Thickness(10, 10, 0, 10),
-                FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
-                FontSize = 18,
-            };
+            
 
             TextBlock coords = new TextBlock
             {
@@ -230,11 +223,36 @@ namespace CharacteristicPoints
                 FontSize = 18,
             };
 
-            ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(x);
-            ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coords);
+            ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(pointNameTextBlockCreator("Point" + (new_point + 1).ToString()));
+            ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Math.Round(ListOfImages[_currentImage].Points[new_point].X, 3), Math.Round(ListOfImages[_currentImage].Points[new_point].Y, 3)));
             ListOfImages[_currentImage].PointsOfImage.delButtons.Add(pointDelButtonCreator(new_point + 1));
             ListOfImages[_currentImage].PointsOfImage.renameButtons.Add(pointRenameButtonCreator(new_point + 1));
             DisplayPointsList();
+        }
+
+        public TextBlock coordsTextBlockCreator(double x, double y)
+        {
+            return new TextBlock
+            {
+                //Name = "Coords" + (new_point + 1).ToString(),
+                Text = $"PosX = {x}\n" +
+                       $"PosY = {y}",
+                Margin = new Thickness(10, 10, 0, 10),
+                FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
+                FontSize = 18,
+            };
+        }
+
+        public TextBlock pointNameTextBlockCreator(string name)
+        {
+            return new TextBlock
+            {
+                Name = String.Concat(name.Where(c => !Char.IsWhiteSpace(c))),
+                Text = name,
+                Margin = new Thickness(10, 10, 0, 10),
+                FontFamily = new System.Windows.Media.FontFamily("#Roboto"),
+                FontSize = 18,
+            };
         }
 
         public RadioButton pointDelButtonCreator(int pointNumber)
@@ -326,11 +344,41 @@ namespace CharacteristicPoints
             var images_from_xml = deser.Load(path);
 
             CreateImagesFromXmlFile(images_from_xml);
+
+            
         }
 
         private void CreateImagesFromXmlFile(List<List<string>> list)
         {
+            ListOfImages.Clear();
+            int counter = 1;
+            for(int i = 0; i < list.Count; i += 4) 
+            {
+                var newImage = new ImageToIndex();
 
+                newImage.Image = new BitmapImage(new Uri(list[i][0]));
+
+                newImage.ImageWidth = newImage.Image.Width;
+                newImage.ImageWidth = newImage.Image.Height;
+
+                foreach (var pointName in list[i + 1])
+                {
+                    newImage.PointsOfImage.pointTexts.Add(pointNameTextBlockCreator(pointName));
+                    newImage.PointsOfImage.delButtons.Add(pointDelButtonCreator(counter));
+                    newImage.PointsOfImage.renameButtons.Add(pointRenameButtonCreator(counter));
+                }
+
+                for(int j = 0; j < list[i + 2].Count; j++)
+                {
+                    newImage.PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Convert.ToDouble(list[i + 2][j]), Convert.ToDouble(list[i + 3][j])));
+                    newImage.Points.Add(new Point(Convert.ToDouble(list[i + 2][j]), Convert.ToDouble(list[i + 3][j])));
+                }
+
+                ListOfImages.Add(newImage);
+            }
+
+            CreateImageList_event();
+            DisplayPointsList();
         }
 
         /* TODO
