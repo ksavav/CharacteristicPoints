@@ -132,7 +132,7 @@
             <!--> Function buttons <-->
             <StackPanel Orientation="Vertical"
                     Grid.Column="3" Grid.Row="1"
-                        Background="#F2F8EC">
+                        Background="#f9f9f9">
 
                 <Image Width="75"
                        Height="75"
@@ -164,7 +164,7 @@
             <StackPanel Orientation="Vertical" 
                         Grid.Column="1" 
                         Grid.Row="1"
-                        Background="#F2F8EC"
+                        Background="#f9f9f9"
                         Name="listOfPoints">
                 <TextBlock Text="Points List"
                            HorizontalAlignment="Center"
@@ -192,7 +192,7 @@
 
 
             <!--> Center section <-->
-            <Grid Grid.Row="1" Grid.Column="2" Background="#F2F8EC"/>
+            <Grid Grid.Row="1" Grid.Column="2" Background="#f9f9f9"/>
             <RadioButton Grid.Column ="2"
                          Grid.Row="1"
                          HorizontalAlignment="Center"
@@ -210,14 +210,23 @@
                               Grid.Column="2" 
                               Grid.Row="1"
                               Visibility="Hidden">
+                <Canvas Grid.Column="2"
+                           Grid.Row="1"
+                           x:Name="canvas1"
+                           Width="800"
+                           Height="700"
+                           Background="Transparent">
+                    
                     <Image Grid.Column="2"
                            Grid.Row="1"
                            x:Name="UserImage"
                            Width="800"
                            Height="700"
                            Stretch="Uniform"
-                           MouseLeftButtonDown="SetIndex"/>
-
+                           MouseLeftButtonDown="SetIndex"
+                           />
+                    
+                </Canvas>
             </local:ZoomBorder>
 
             <!--> Row 0 Column 2 <-->

@@ -22,8 +22,8 @@ namespace CharacteristicPoints.XML
                         from el in image.PointsOfImage.pointTexts 
                         select new XElement("Point", 
                             new XElement("PointName", el.Text),
-                            new XElement("X", Math.Round(image.Points[image.PointsOfImage.pointTexts.FindIndex(a => a.Name == el.Name)].X, 3).ToString()),
-                            new XElement("Y", Math.Round(image.Points[image.PointsOfImage.pointTexts.FindIndex(a => a.Name == el.Name)].Y, 3).ToString())))
+                            new XElement("X", Math.Round(image.Points[image.PointsOfImage.pointTexts.FindIndex(a => a.Name == el.Name)].X, 0).ToString()),
+                            new XElement("Y", Math.Round(image.Points[image.PointsOfImage.pointTexts.FindIndex(a => a.Name == el.Name)].Y, 0).ToString())))
                 )));
 
             return newXmlFile;
