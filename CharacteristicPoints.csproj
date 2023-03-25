@@ -35,4 +35,10 @@
     <Resource Include="Images\upload_icon.png" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Compile Update="DialogWindow\UserInputXmlCsvName.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+  </ItemGroup>
+
 </Project>

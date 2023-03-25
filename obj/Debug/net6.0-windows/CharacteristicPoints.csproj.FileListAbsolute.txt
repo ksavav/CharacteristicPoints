@@ -27,3 +27,5 @@ E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\Menu
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\PointButtonTheme.baml
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\UserInput.g.cs
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\UserInput.baml
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\UserInputXmlCsvName.g.cs
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\UserInputXmlCsvName.baml

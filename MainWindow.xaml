@@ -161,19 +161,23 @@
             </StackPanel>
 
             <!--> Points List <-->
-            <StackPanel Orientation="Vertical" 
-                        Grid.Column="1" 
-                        Grid.Row="1"
-                        Background="#f9f9f9"
-                        Name="listOfPoints">
-                <TextBlock Text="Points List"
-                           HorizontalAlignment="Center"
-                           Margin="0, 20, 0, 10"
-                           FontSize="23"
-                           FontFamily="/Fonts/#Roboto"
-                           Visibility="Visible"
-                           Name="PlaceHolder"/>
-            </StackPanel>
+            <ScrollViewer VerticalScrollBarVisibility="Auto"
+                          Grid.Column="1" 
+                          Grid.Row="1">
+                <StackPanel Orientation="Vertical" 
+                            Grid.Column="1" 
+                            Grid.Row="1"
+                            Background="#f9f9f9"
+                            Name="listOfPoints">
+                    <TextBlock Text="Points List"
+                               HorizontalAlignment="Center"
+                               Margin="0, 20, 0, 10"
+                               FontSize="23"
+                               FontFamily="/Fonts/#Roboto"
+                               Visibility="Visible"
+                               Name="PlaceHolder"/>
+                </StackPanel>
+            </ScrollViewer>
 
             <Border BorderThickness="0 0 2 0" 
                     BorderBrush="Black"
