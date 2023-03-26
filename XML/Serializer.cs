@@ -4,8 +4,10 @@ using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Xml;
 using System.Xml.Linq;
 using System.Xml.Serialization;
+using System.Xml.XPath;
 
 namespace CharacteristicPoints.XML
 {
@@ -32,8 +34,8 @@ namespace CharacteristicPoints.XML
         public void SaveToCsv(string fileName, List<ImageToIndex> ListOfImages)
         {
             var xmlToCsv = Save(fileName, ListOfImages);
-
-            StringBuilder csvFile = new StringBuilder();
+            xmlToCsv.Save("temp.xml");
+            /*StringBuilder csvFile = new StringBuilder();
 
             foreach(XElement el in xmlToCsv.Elements())
             {
@@ -48,14 +50,32 @@ namespace CharacteristicPoints.XML
                 
             }
             
-            System.IO.File.WriteAllText(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, fileName + ".csv"), csvFile.ToString());
+            System.IO.File.WriteAllText(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, fileName + ".csv"), csvFile.ToString());*/
+            string result = string.Empty;
+            var xpathDoc = new XPathDocument("temp.xml");
+            var xsltTransform = new System.Xml.Xsl.XslCompiledTransform();
+            xsltTransform.Load("data.xsl");
+
+            using (MemoryStream ms = new MemoryStream())
+            {
+                var writer = new XmlTextWriter(ms, Encoding.UTF8);
+                using (var rd = new StreamReader(ms))
+                {
+                    var argList = new System.Xml.Xsl.XsltArgumentList();
+                    xsltTransform.Transform(xpathDoc, argList, writer);
+                    ms.Position = 0;
+                    result = rd.ReadToEnd();
+                }
+            }
+
+            File.WriteAllText(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "src/" + fileName + ".csv"), result);
         }
 
         public void SaveToXml(string fileName, List<ImageToIndex> ListOfImages)
         {
             var xmlFile = Save(fileName, ListOfImages);
 
-            xmlFile.Save(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, fileName + ".xml"));
+            xmlFile.Save(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "src/" + fileName + ".xml"));
         }
     }
 }

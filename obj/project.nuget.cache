@@ -1,8 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "M7PqCu/SlVcgnG1cSOZFBQjZyb1Nk5E7Tx7hPr0lFNNpLzYDsZIkFHVQOVzn+vhVm/J+XSz/w7lpUY8EvUgWIw==",
+  "dgSpecHash": "9HS/RnPj5gnlOSfS7LLqbMF5PJBBs4/xw/qcIxuWL9XDd+VtIonOzZTMsBoRQn/imLOfZPXbxWbqm0pLwS0Nvg==",
   "success": true,
   "projectFilePath": "E:\\Programowanie\\CSharp\\CharacteristicPoints\\CharacteristicPoints.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\xawer\\.nuget\\packages\\ookii.dialogs.wpf\\5.0.1\\ookii.dialogs.wpf.5.0.1.nupkg.sha512"
+  ],
   "logs": []
 }

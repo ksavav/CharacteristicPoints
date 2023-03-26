@@ -11,6 +11,7 @@ using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
+using Ookii.Dialogs.Wpf;
 
 namespace CharacteristicPoints
 {
@@ -53,22 +54,50 @@ namespace CharacteristicPoints
 
                 if(NewImage.Image != null)
                 {
-                    NewImage.ImageHeight = NewImage.Image.PixelHeight;
-                    NewImage.ImageWidth = NewImage.Image.PixelWidth;
-
-                    if (ListOfImages.Count == 0)
-                    {
-                        UserImage.Source = NewImage.Image;
-                    }
-
-                    upload.Visibility = Visibility.Hidden;
-                    border.Visibility = Visibility.Visible;
-
-                    ListOfImages.Add(NewImage);
-                    CreateImageList_event();
+                    LoadImage(NewImage);
                 }
             }
         }
+
+        private void UploadFolder(object sender, RoutedEventArgs e)
+        {
+            VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
+
+            
+
+            if ((bool)dialog.ShowDialog(this))
+            {
+                var files = Directory.EnumerateFiles(dialog.SelectedPath, "*.*", SearchOption.AllDirectories)
+                    .Where(s => s.EndsWith(".jpg") || s.EndsWith(".png") || s.EndsWith(".bmp"));
+
+                foreach (var file in files)
+                {
+                    var NewImage = new ImageToIndex();
+
+                    NewImage.Image = new BitmapImage(new Uri(file));
+
+                    LoadImage(NewImage);
+                }
+            }
+        }
+
+        private void LoadImage(ImageToIndex NewImage)
+        {
+            NewImage.ImageHeight = NewImage.Image.PixelHeight;
+            NewImage.ImageWidth = NewImage.Image.PixelWidth;
+
+            if (ListOfImages.Count == 0)
+            {
+                UserImage.Source = NewImage.Image;
+            }
+
+            upload.Visibility = Visibility.Hidden;
+            border.Visibility = Visibility.Visible;
+
+            ListOfImages.Add(NewImage);
+            CreateImageList_event();
+        }
+
 
         private void CreateImageList_event()
         {
@@ -183,11 +212,7 @@ namespace CharacteristicPoints
             {
                 var coords = e.GetPosition(UserImage);
 
-                coords = GetRealPoint(coords);
-                ListOfImages[_currentImage].Points.Add(coords);
-
-                
-                CreatePointsList();
+                CreatePointsList(coords);
             }
         }
 
@@ -220,13 +245,14 @@ namespace CharacteristicPoints
             }   
         }       
 
-        public void CreatePointsList()
+        public void CreatePointsList(Point coordinates)
         {
             PlaceHolder.Visibility = Visibility.Hidden;
 
-            var new_point = ListOfImages[_currentImage].Points.Count - 1;
+            var new_point = ListOfImages[_currentImage].Points.Count;
 
             ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(pointNameTextBlockCreator("Point" + (new_point + 1).ToString()));
+            GetRealPoint(coordinates);
             ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Math.Round(ListOfImages[_currentImage].Points[new_point].X, 0), Math.Round(ListOfImages[_currentImage].Points[new_point].Y, 0)));
             ListOfImages[_currentImage].PointsOfImage.delButtons.Add(pointDelButtonCreator(new_point + 1));
             ListOfImages[_currentImage].PointsOfImage.renameButtons.Add(pointRenameButtonCreator(new_point + 1));
@@ -425,7 +451,7 @@ namespace CharacteristicPoints
         }
 
         
-        public Point GetRealPoint(Point pointFromCanvas)
+        public void GetRealPoint(Point pointFromCanvas)
         {
             double canvasWidth;
             double canvasHeight;
@@ -433,6 +459,9 @@ namespace CharacteristicPoints
             {
                 canvasWidth = UserImage.Width;
                 canvasHeight = ListOfImages[_currentImage].ImageHeight / (ListOfImages[_currentImage].ImageWidth / UserImage.Width);
+
+                ListOfImages[_currentImage].Points.Add(new Point(pointFromCanvas.X * ListOfImages[_currentImage].ImageWidth / canvasWidth,
+                    pointFromCanvas.Y * ListOfImages[_currentImage].ImageHeight / canvasHeight));
 
                 PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + (UserImage.Height - canvasHeight)/2), _currentImage);
             }
@@ -442,11 +471,11 @@ namespace CharacteristicPoints
                 canvasHeight = UserImage.Height;
                 canvasWidth = ListOfImages[_currentImage].ImageWidth / (ListOfImages[_currentImage].ImageHeight / UserImage.Height);
 
-                PointVizualization(new Point(pointFromCanvas.X + (UserImage.Width - canvasWidth)/2, pointFromCanvas.Y), _currentImage);
-            }
+                ListOfImages[_currentImage].Points.Add(new Point(pointFromCanvas.X * ListOfImages[_currentImage].ImageWidth / canvasWidth,
+                    pointFromCanvas.Y * ListOfImages[_currentImage].ImageHeight / canvasHeight));
 
-            return (new Point(pointFromCanvas.X * ListOfImages[_currentImage].ImageWidth / canvasWidth, 
-                pointFromCanvas.Y * ListOfImages[_currentImage].ImageHeight / canvasHeight));
+                PointVizualization(new Point(pointFromCanvas.X + (UserImage.Width - canvasWidth)/2, pointFromCanvas.Y), _currentImage);
+            } 
         }
 
         public void PointVizualization(Point cords, int image)
@@ -492,9 +521,10 @@ namespace CharacteristicPoints
             }
         }
 
+        
+
 
         /* TODO
-         * utworzenie csv
          * uporzatkowanie kodu
          */
     }

@@ -24,6 +24,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Ookii.Dialogs.Wpf" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Images\bin_icon.png" />
     <Resource Include="Images\left_triangle_icon.png" />
     <Resource Include="Images\logo_eti.png" />

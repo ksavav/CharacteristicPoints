@@ -70,6 +70,14 @@
                              Click="UploadImage"
                              Name="uploadButton"/>
 
+                <RadioButton Content="Upload folder"
+                             Height="40"
+                             Foreground="Black"
+                             FontSize="23"
+                             Style="{StaticResource MenuButtonTheme}"
+                             Click="UploadFolder"
+                             Name="uploadFolderButton"/>
+
                 <RadioButton Content="Upload XML file"
                              Height="40"
                              Foreground="Black"
