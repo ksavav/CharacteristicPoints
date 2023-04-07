@@ -52,7 +52,7 @@ namespace CharacteristicPoints.XML
             
             System.IO.File.WriteAllText(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, fileName + ".csv"), csvFile.ToString());*/
             string result = string.Empty;
-            var xpathDoc = new XPathDocument("temp.xml");
+            var xpathDoc = new XPathDocument("xd.xml");
             var xsltTransform = new System.Xml.Xsl.XslCompiledTransform();
             xsltTransform.Load("data.xsl");
 

@@ -22,8 +22,14 @@ namespace CharacteristicPoints
     {
         public List<ImageToIndex> ListOfImages = new List<ImageToIndex>();
         bool flag = false;
+        bool moveFlag = false;
+        Ellipse movingDot;
         int _currentImage = 0;
         int maxSizeOfImageGallery = 7;
+        double Xproportion;
+        double Yproportion;
+        double widthAdjustment;
+        double heighAdjustment; 
 
         public MainWindow()
         {
@@ -152,7 +158,8 @@ namespace CharacteristicPoints
                 _currentImage--;
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
-
+            flag = false;
+            moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
             DisplayPointsList();
@@ -167,7 +174,8 @@ namespace CharacteristicPoints
                 _currentImage++;
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
-
+            flag = false;
+            moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
             DisplayPointsList();
@@ -407,38 +415,45 @@ namespace CharacteristicPoints
             int counter2 = 0;
             for (int i = 0; i < list.Count; i += 4) 
             {
-                var newImage = new ImageToIndex();
-
-                newImage.Image = new BitmapImage(new Uri(list[i][0]));
-
-                if(i == 0) UserImage.Source = newImage.Image;
-
-                newImage.ImageWidth = newImage.Image.PixelWidth;
-                newImage.ImageHeight = newImage.Image.PixelHeight;
-                int counter = 1;
-                
-                foreach (var pointName in list[i + 1])
+                try
                 {
-                    newImage.PointsOfImage.pointTexts.Add(pointNameTextBlockCreator(pointName));
-                    newImage.PointsOfImage.delButtons.Add(pointDelButtonCreator(counter));
-                    newImage.PointsOfImage.renameButtons.Add(pointRenameButtonCreator(counter));
+                    var newImage = new ImageToIndex();
 
-                    counter++;
+                    newImage.Image = new BitmapImage(new Uri(list[i][0]));
+
+                    if (i == 0) UserImage.Source = newImage.Image;
+
+                    newImage.ImageWidth = newImage.Image.PixelWidth;
+                    newImage.ImageHeight = newImage.Image.PixelHeight;
+                    int counter = 1;
+
+                    foreach (var pointName in list[i + 1])
+                    {
+                        newImage.PointsOfImage.pointTexts.Add(pointNameTextBlockCreator(pointName));
+                        newImage.PointsOfImage.delButtons.Add(pointDelButtonCreator(counter));
+                        newImage.PointsOfImage.renameButtons.Add(pointRenameButtonCreator(counter));
+
+                        counter++;
+                    }
+
+                    for (int j = 0; j < list[i + 2].Count; j++)
+                    {
+                        newImage.PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Convert.ToDouble(list[i + 2][j]), Convert.ToDouble(list[i + 3][j])));
+                        newImage.Points.Add(new Point(Convert.ToDouble(list[i + 2][j]), Convert.ToDouble(list[i + 3][j])));
+                    }
+
+                    ListOfImages.Add(newImage);
+
+                    for (int x = 0; x < list[i + 2].Count; x++)
+                    {
+                        GetPositionAndCreateDotOnCanvas(newImage.Points[x], counter2);
+                    }
+                    counter2++;
                 }
-
-                for(int j = 0; j < list[i + 2].Count; j++)
+                catch(Exception e)
                 {
-                    newImage.PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Convert.ToDouble(list[i + 2][j]), Convert.ToDouble(list[i + 3][j])));
-                    newImage.Points.Add(new Point(Convert.ToDouble(list[i + 2][j]), Convert.ToDouble(list[i + 3][j]))); 
-                }
-                
-                ListOfImages.Add(newImage);
 
-                for(int x = 0; x < list[i + 2].Count; x++)
-                {
-                    GetPositionAndCreateDotOnCanvas(newImage.Points[x], counter2);
                 }
-                counter2++;
             }
 
             upload.Visibility = Visibility.Hidden;
@@ -460,8 +475,14 @@ namespace CharacteristicPoints
                 canvasWidth = UserImage.Width;
                 canvasHeight = ListOfImages[_currentImage].ImageHeight / (ListOfImages[_currentImage].ImageWidth / UserImage.Width);
 
-                ListOfImages[_currentImage].Points.Add(new Point(pointFromCanvas.X * ListOfImages[_currentImage].ImageWidth / canvasWidth,
-                    pointFromCanvas.Y * ListOfImages[_currentImage].ImageHeight / canvasHeight));
+                Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
+                Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
+
+                widthAdjustment = (UserImage.Height - canvasHeight) / 2;
+                heighAdjustment = 0;
+
+                ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
+                    Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
                 PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + (UserImage.Height - canvasHeight)/2), _currentImage);
             }
@@ -471,8 +492,14 @@ namespace CharacteristicPoints
                 canvasHeight = UserImage.Height;
                 canvasWidth = ListOfImages[_currentImage].ImageWidth / (ListOfImages[_currentImage].ImageHeight / UserImage.Height);
 
-                ListOfImages[_currentImage].Points.Add(new Point(pointFromCanvas.X * ListOfImages[_currentImage].ImageWidth / canvasWidth,
-                    pointFromCanvas.Y * ListOfImages[_currentImage].ImageHeight / canvasHeight));
+                Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
+                Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
+
+                widthAdjustment = 0;
+                heighAdjustment = (UserImage.Width - canvasWidth)/ 2;
+
+                ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
+                    Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
                 PointVizualization(new Point(pointFromCanvas.X + (UserImage.Width - canvasWidth)/2, pointFromCanvas.Y), _currentImage);
             } 
@@ -482,6 +509,7 @@ namespace CharacteristicPoints
         {
             var ellipse = new Ellipse()
             {
+                Name = ListOfImages[image].PointsOfImage.pointTexts[ListOfImages[image].PointsOfImage.pointDots.Count].Text,
                 Width = 5,
                 Height = 5,
                 Fill = Brushes.Red,
@@ -490,6 +518,7 @@ namespace CharacteristicPoints
                 "\n" + ListOfImages[image].Points[ListOfImages[image].PointsOfImage.pointDots.Count]
 
             };
+            ellipse.MouseDown += MoveDot;
             Canvas.SetLeft(ellipse, cords.X - ellipse.Width/2);
             Canvas.SetTop(ellipse, cords.Y - ellipse.Height/2);
             ListOfImages[image].PointsOfImage.pointDots.Add(ellipse);
@@ -505,7 +534,11 @@ namespace CharacteristicPoints
                 canvasWidth = UserImage.Width;
                 canvasHeight = ListOfImages[image].ImageHeight / (ListOfImages[image].ImageWidth / UserImage.Width);
 
+                Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
+                Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
 
+                widthAdjustment = (UserImage.Height - canvasHeight) / 2;
+                heighAdjustment = 0;
 
                 PointVizualization(new Point(pointOnImage.X / (ListOfImages[image].ImageWidth / UserImage.Width),
                     pointOnImage.Y / (ListOfImages[image].ImageHeight / UserImage.Height) + (UserImage.Height - canvasHeight)/2), image);
@@ -516,12 +549,86 @@ namespace CharacteristicPoints
                 canvasHeight = UserImage.Height;
                 canvasWidth = ListOfImages[image].ImageWidth / (ListOfImages[image].ImageHeight / UserImage.Height);
 
+                Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
+                Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
+
+                widthAdjustment = 0;
+                heighAdjustment = (UserImage.Width - canvasWidth) / 2;
+
                 PointVizualization(new Point(pointOnImage.X / (ListOfImages[image].ImageWidth / UserImage.Width) + (UserImage.Width - canvasWidth)/2,
                     pointOnImage.Y / (ListOfImages[image].ImageHeight / UserImage.Height)), image);
             }
         }
 
-        
+        private void MoveDot(object sender, MouseButtonEventArgs e)
+        {
+            if (e.ClickCount == 2 && moveFlag == false)
+            {
+                Ellipse srcDot = e.Source as Ellipse;
+                srcDot.Fill = Brushes.Green;
+                moveFlag = true;
+                movingDot = srcDot;
+            }
+
+            if (e.ClickCount == 1 && moveFlag)
+            {
+                movingDot.Fill = Brushes.Red;
+                moveFlag = false;
+                movingDot = null;
+            }
+        }
+
+        private void MoveDotWithKeyborad(object sender, KeyEventArgs e)
+        {
+            if (moveFlag)
+            {
+                var dot = ListOfImages[_currentImage].PointsOfImage.pointDots.FindIndex(a => a.Name == movingDot.Name);
+
+                var PointToMove = ListOfImages[_currentImage].Points[dot];
+
+                switch (e.Key)
+                {
+                    case Key.Left:
+                        if (ListOfImages[_currentImage].Points[dot].X - 1 >= 0)
+                        {
+                            PointToMove.X -= 1;
+                            Canvas.SetLeft(movingDot, PointToMove.X / Xproportion + heighAdjustment - movingDot.Width/2);
+                        };
+                        break;
+
+                    case Key.Right:
+                        if (ListOfImages[_currentImage].ImageWidth >= ListOfImages[_currentImage].Points[dot].X + 1)
+                        {
+                            PointToMove.X += 1;
+                            Canvas.SetLeft(movingDot, PointToMove.X / Xproportion + heighAdjustment - movingDot.Width / 2);
+                        };
+                        break;
+
+                    case Key.Down:
+                        if (ListOfImages[_currentImage].ImageHeight >= ListOfImages[_currentImage].Points[dot].Y + 1)
+                        {
+                            PointToMove.Y += 1;
+                            Canvas.SetTop(movingDot, PointToMove.Y / Yproportion + widthAdjustment - movingDot.Height / 2);
+                        };
+                        break;
+
+                    case Key.Up:
+                        if (ListOfImages[_currentImage].Points[dot].Y - 1 >= 0)
+                        {
+                            PointToMove.Y -= 1;
+                            Canvas.SetTop(movingDot, PointToMove.Y / Yproportion + widthAdjustment - movingDot.Height / 2);
+                        };
+                        break;
+                }
+
+                ListOfImages[_currentImage].Points[dot] = PointToMove;
+                ListOfImages[_currentImage].PointsOfImage.pointCoordinates[dot].Text =
+                    $"PosX = {PointToMove.X}\n" +
+                    $"PosY = {PointToMove.Y}";
+                movingDot.ToolTip = ListOfImages[_currentImage].PointsOfImage.pointTexts[dot].Text +
+                    "\n" + PointToMove;
+            }
+        }
 
 
         /* TODO
