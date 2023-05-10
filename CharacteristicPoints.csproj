@@ -18,11 +18,16 @@
     <None Remove="Images\plus_icon.png" />
     <None Remove="Images\point_icon.png" />
     <None Remove="Images\point_icon.svg" />
+    <None Remove="Images\point_icon_red.png" />
     <None Remove="Images\right_icon.png" />
     <None Remove="Images\right_icon.svg" />
     <None Remove="Images\right_triangle_icon.png" />
     <None Remove="Images\test.jpg" />
     <None Remove="Images\upload_icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Images\point_icon_red.png" />
   </ItemGroup>
 
   <ItemGroup>

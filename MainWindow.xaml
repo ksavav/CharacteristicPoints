@@ -142,11 +142,12 @@
             <StackPanel Orientation="Vertical"
                     Grid.Column="3" Grid.Row="1"
                         Background="#f9f9f9">
-
+                
                 <Image Width="75"
                        Height="75"
                        Source="/Images/point_icon.png"
                        Margin="0,10,0,10"
+                       x:Name="setIndexButton"
                        MouseDown="AddPoints"/>
 
                 <Image Source="/Images/left_icon.png"

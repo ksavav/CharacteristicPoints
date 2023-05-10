@@ -159,6 +159,8 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
             flag = false;
+            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon.png");
+            setIndexButton.Source = new BitmapImage(new Uri(path));
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
@@ -175,6 +177,8 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
             flag = false;
+            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon.png");
+            setIndexButton.Source = new BitmapImage(new Uri(path));
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
@@ -355,8 +359,19 @@ namespace CharacteristicPoints
 
         private void AddPoints(object sender, MouseButtonEventArgs e)
         {
-            if (flag == false) flag = true;
-            else flag = false;
+
+            if (flag == false)
+            {
+                flag = true;
+                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_red.png");
+                setIndexButton.Source = new BitmapImage(new Uri(path));
+            }
+            else
+            {
+                flag = false;
+                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon.png");
+                setIndexButton.Source = new BitmapImage(new Uri(path));
+            }
         }
 
         private string GetNameForFile()
