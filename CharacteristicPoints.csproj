@@ -10,6 +10,7 @@
   <ItemGroup>
     <None Remove="Images\bin_icon.png" />
     <None Remove="Images\bin_icon.svg" />
+    <None Remove="Images\download_button_icon.png" />
     <None Remove="Images\left_icon.png" />
     <None Remove="Images\left_icon.svg" />
     <None Remove="Images\left_triangle_icon.png" />
@@ -23,10 +24,12 @@
     <None Remove="Images\right_icon.svg" />
     <None Remove="Images\right_triangle_icon.png" />
     <None Remove="Images\test.jpg" />
+    <None Remove="Images\upload_button_icon.png" />
     <None Remove="Images\upload_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <Resource Include="Images\download_button_icon.png" />
     <Resource Include="Images\point_icon_red.png" />
   </ItemGroup>
 
@@ -44,6 +47,7 @@
     <Resource Include="Images\logo_eti.png" />
     <Resource Include="Images\point_icon.png" />
     <Resource Include="Images\right_icon.png" />
+    <Resource Include="Images\upload_button_icon.png" />
     <Resource Include="Images\upload_icon.png" />
   </ItemGroup>
 

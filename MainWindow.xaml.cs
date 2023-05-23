@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Ookii.Dialogs.Wpf;
+using System.Runtime.InteropServices;
 
 namespace CharacteristicPoints
 {
@@ -25,15 +26,17 @@ namespace CharacteristicPoints
         bool moveFlag = false;
         Ellipse movingDot;
         int _currentImage = 0;
-        int maxSizeOfImageGallery = 7;
+        int maxSizeOfImageGallery = 9;
         double Xproportion;
         double Yproportion;
         double widthAdjustment;
-        double heighAdjustment; 
+        double heighAdjustment;
+        double factor = 0.3;
 
         public MainWindow()
         {
             InitializeComponent();
+            Loaded += (x, y) => Keyboard.Focus(canvas1);
         }
 
         private void ExitButton(object sender, RoutedEventArgs e)
@@ -46,6 +49,28 @@ namespace CharacteristicPoints
             DragMove();
         }
 
+        private void UserImage_MouseMove(object sender, MouseEventArgs e)
+        {
+            Point center = e.GetPosition(canvas1);
+            double length = MagnifierRectangle.ActualWidth * factor;
+            double radius = length / 2;
+            Rect viewboxRect = new Rect(center.X - radius, center.Y - radius, length, length);
+            MagnifierBrush.Viewbox = viewboxRect;
+
+            //MagnifierRectangle.SetValue(Canvas.LeftProperty, center.X - MagnifierRectangle.ActualWidth / 2);
+            //MagnifierRectangle.SetValue(Canvas.TopProperty, center.Y - MagnifierRectangle.ActualHeight / 2);
+        }
+
+        private void UserImage_MouseEnter(object sender, MouseEventArgs e)
+        {
+            MagnifierRectangle.Visibility = Visibility.Visible;
+        }
+
+        private void UserImage_MouseLeave(object sender, MouseEventArgs e)
+        {
+            MagnifierRectangle.Visibility = Visibility.Hidden;
+        }
+
         private void UploadImage(object sender, RoutedEventArgs e)
         {
             var NewImage = new ImageToIndex();
@@ -56,7 +81,7 @@ namespace CharacteristicPoints
 
             if (od.ShowDialog() == true)
             {
-                NewImage.Image = new BitmapImage(new Uri(od.FileName));
+                NewImage.Image = new BitmapImage(new Uri(od.FileName)) ;
 
                 if(NewImage.Image != null)
                 {
@@ -102,6 +127,7 @@ namespace CharacteristicPoints
 
             ListOfImages.Add(NewImage);
             CreateImageList_event();
+            GetRealPoint(new Point(-1, -1));
         }
 
 
@@ -196,7 +222,7 @@ namespace CharacteristicPoints
         private void RemoveImage(object sender, MouseButtonEventArgs e)
         {
             int x = _currentImage;
-            if (ListOfImages.Count != 1)
+            if (ListOfImages.Count > 1)
             {
                 RemoveDots(x);
                 ListOfImages.Remove(ListOfImages[_currentImage]);
@@ -357,9 +383,13 @@ namespace CharacteristicPoints
             }
         }
 
-        private void AddPoints(object sender, MouseButtonEventArgs e)
+        private void AddPoints_Event(object sender, MouseButtonEventArgs e)
         {
+            AddPoints();
+        }
 
+        private void AddPoints()
+        {
             if (flag == false)
             {
                 flag = true;
@@ -496,10 +526,13 @@ namespace CharacteristicPoints
                 widthAdjustment = (UserImage.Height - canvasHeight) / 2;
                 heighAdjustment = 0;
 
-                ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
+                if(pointFromCanvas.X != -1)
+                {
+                    ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
                     Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
-                PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + (UserImage.Height - canvasHeight)/2), _currentImage);
+                    PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + (UserImage.Height - canvasHeight) / 2), _currentImage);
+                }
             }
 
             else
@@ -513,10 +546,13 @@ namespace CharacteristicPoints
                 widthAdjustment = 0;
                 heighAdjustment = (UserImage.Width - canvasWidth)/ 2;
 
-                ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
+                if(pointFromCanvas.X != -1)
+                {
+                    ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
                     Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
-                PointVizualization(new Point(pointFromCanvas.X + (UserImage.Width - canvasWidth)/2, pointFromCanvas.Y), _currentImage);
+                    PointVizualization(new Point(pointFromCanvas.X + (UserImage.Width - canvasWidth) / 2, pointFromCanvas.Y), _currentImage);
+                }
             } 
         }
 
@@ -593,6 +629,8 @@ namespace CharacteristicPoints
             }
         }
 
+        [DllImport("User32.dll")]
+        private static extern bool SetCursorPos(int X, int Y);
         private void MoveDotWithKeyborad(object sender, KeyEventArgs e)
         {
             if (moveFlag)
@@ -600,6 +638,8 @@ namespace CharacteristicPoints
                 var dot = ListOfImages[_currentImage].PointsOfImage.pointDots.FindIndex(a => a.Name == movingDot.Name);
 
                 var PointToMove = ListOfImages[_currentImage].Points[dot];
+
+
 
                 switch (e.Key)
                 {
@@ -643,8 +683,66 @@ namespace CharacteristicPoints
                 movingDot.ToolTip = ListOfImages[_currentImage].PointsOfImage.pointTexts[dot].Text +
                     "\n" + PointToMove;
             }
-        }
 
+            else
+            {
+                var point_on_canvas = Mouse.GetPosition(UserImage);
+                var point = Mouse.GetPosition(Application.Current.MainWindow);
+
+                if(point_on_canvas.X >= 0 && point_on_canvas.Y >= 0 && point_on_canvas.X <= UserImage.ActualWidth && point_on_canvas.Y <= UserImage.ActualHeight) 
+                {
+                    // Left boundary
+                    var xL = (int)App.Current.MainWindow.Left;
+                    // Right boundary
+                    var xR = xL + (int)App.Current.MainWindow.Width;
+                    // Top boundary
+                    var yT = (int)App.Current.MainWindow.Top;
+                    // Bottom boundary
+                    var yB = yT + (int)App.Current.MainWindow.Height;
+
+                    switch (e.Key)
+                    {
+                        case Key.Left:
+                            if (point.X - 1 >= 0)
+                            {
+                                point.X -= 1 / Xproportion;
+                            };
+                            break;
+
+                        case Key.Right:
+                            if (ListOfImages[_currentImage].ImageWidth >= point.X + 1)
+                            {
+                                point.X += 1 / Xproportion;
+                            };
+                            break;
+
+                        case Key.Down:
+                            if (ListOfImages[_currentImage].ImageHeight >= point.Y + 1)
+                            {
+                                point.Y += 1 / Yproportion;
+                            };
+                            break;
+
+                        case Key.Up:
+                            if (point.Y - 1 >= 0)
+                            {
+                                point.Y -= 1 / Yproportion;
+                            };
+                            break;
+
+                        case Key.P:
+                            if(flag) CreatePointsList(point_on_canvas);
+                            break;
+
+                        case Key.F:
+                            AddPoints();
+                            break;
+                    }
+
+                    SetCursorPos((int)point.X + xL, (int)point.Y +yT);
+                }
+            }
+        }
 
         /* TODO
          * uporzatkowanie kodu

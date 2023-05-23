@@ -12,6 +12,7 @@
                 <ResourceDictionary Source="Theme/PointButtonTheme.xaml"/>
                 <ResourceDictionary Source="Theme/MenuLableTheme.xaml"/>
                 <ResourceDictionary Source="Theme/UploadButtonTheme.xaml"/>
+                <ResourceDictionary Source="Theme/MenuUpload.xaml"/>
             </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
