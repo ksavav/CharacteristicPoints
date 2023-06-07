@@ -42,7 +42,7 @@
                     Padding="20"
                     Background="Transparent"
                     MouseDown="DragWindow"
-                    BorderThickness="10"
+                    BorderThickness="20"
                     BorderBrush="Transparent"/>
             <Border Grid.Column="2"
                     Padding="10"
@@ -50,21 +50,21 @@
 
 
             <!--> Buttons <-->
-            
-            
+
+
             <Border Grid.Column="1" Padding="5"
                     Background="Transparent"
                     MouseDown="DragWindow">
                 <Menu Grid.Column="1" Padding="10" Background="White">
                     <MenuItem Width="150"
                               Height="70"
-                              FontSize="20"
-                              HorizontalAlignment="Left" VerticalAlignment="Center"
-                              >
+                              FontSize="20">
+                        <MenuItem.Background>
+                            <ImageBrush ImageSource="/Images/upload_button_icon_text.png" Stretch="Uniform"/>
+                        </MenuItem.Background>
                         <MenuItem.Header>
-                            <TextBlock Text="Upload" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="35,40,0,0"/>
+                            <TextBlock Text="Upload" Margin="35, 40, 0, -10"/>
                         </MenuItem.Header>
-                    
                         <MenuItem Header="Image" Click="UploadImage"/>
                         <MenuItem Header="Folder" Click="UploadFolder"/>
                         <MenuItem Header="XML file" Click="DeserializeFromXml"/>
@@ -73,8 +73,11 @@
                               Height="70"
                               FontSize="20"
                               HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <MenuItem.Background>
+                            <ImageBrush ImageSource="/Images/download_button_icon_text.png" Stretch="Uniform"/>
+                        </MenuItem.Background>
                         <MenuItem.Header>
-                            <TextBlock Text="Download" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="25,40,0,0"/>
+                            <TextBlock Text="Download" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="24,40,0,-10"/>
                         </MenuItem.Header>
                         <MenuItem Header="XML file" Click="SerializeToXml"/>
                         <MenuItem Header="CSV file" Click="SerializeToCsv"/>
@@ -86,26 +89,34 @@
                               Stroke="Black"
                               StrokeThickness="2"/>
                     </Canvas>
-                    
+
                     <MenuItem Width="150"
                               Height="70"
                               FontSize="20"
+                              Click="AddPoints_Event"
                               HorizontalAlignment="Left" VerticalAlignment="Center">
+                        <MenuItem.Background>
+                            <ImageBrush ImageSource="/Images/point_icon_text.png" Stretch="Uniform" x:Name="setIndexButton"/>
+                        </MenuItem.Background>
                         <MenuItem.Header>
-                            <TextBlock Text="Add Point" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="23,40,0,0"/>
+                            <TextBlock Text="Add Point" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="23,40,0,-10"/>
                         </MenuItem.Header>
                     </MenuItem>
                     <MenuItem Width="150"
                               Height="70"
                               FontSize="20"
-                              HorizontalAlignment="Left" VerticalAlignment="Center">
+                              Click="RemoveImage"
+                              HorizontalAlignment="Left" VerticalAlignment="Center" >
+                        <MenuItem.Background>
+                            <ImageBrush ImageSource="/Images/bin_icon_text.png" Stretch="Uniform"/>
+                        </MenuItem.Background>
                         <MenuItem.Header>
-                            <TextBlock Text="Delete Image" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,40,0,0"/>
+                            <TextBlock Text="Delete Image" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="10,40,0,-10"/>
                         </MenuItem.Header>
                     </MenuItem>
                 </Menu>
             </Border>
-            
+
             <!-- 
             <StackPanel Grid.Row="1">
                 <RadioButton Content="Upload"
@@ -163,15 +174,32 @@
 
             </StackPanel> -->
 
-            <RadioButton Content="Exit"
-                             Height="40"
+            <!-- <RadioButton Content="Exit"
+                             Height="90"
+                             Width ="100"
                              Foreground="Black"
                              Background="#EE856F"
                              FontSize="25"
-                             Grid.Row="2"
+                             Grid.Row="0"
                              Style="{StaticResource MenuButtonTheme}"
-                             Margin="0,60,0,0"
-                             Click="ExitButton"/>
+                             Margin="0,0,20,0"
+                             HorizontalAlignment="Right"
+                             Click="ExitButton"
+                             Grid.Column="1"/> -->
+
+
+            <Border CornerRadius="8"
+                    Grid.Row ="0"
+                    Grid.Column="2"
+                    Height="70"
+                    Width ="70"
+                    HorizontalAlignment="Right"
+                    Margin="0,0,15,0"
+                    MouseDown="ExitButton">
+                <Border.Background>
+                    <ImageBrush Stretch="Fill" ImageSource="/Images/close_button.png"/>
+                </Border.Background>
+            </Border>
 
             <!--> Logo image <-->
             <Image Grid.Row ="0" 
@@ -190,47 +218,54 @@
 
             <!--> Inner section <-->
 
+            
+            <Image Source="/Images/left_icon.png"
+                   Grid.Row="2"
+                   HorizontalAlignment="Right"
+                   Height="75"
+                   Width="75"
+                   Margin="0,10,0,10"
+                   MouseDown="MoveLeft"/>
+
+            <Image Source="/Images/right_icon.png"
+                   Grid.Column="2"
+                   Grid.Row="2"
+                   HorizontalAlignment="Left"
+                   Height="75"
+                   Width="75"
+                   Margin="0,10,0,10"
+                   MouseDown="MoveRight"/>
+
+            <!-->
             <Image Width="50"
                        Height="50"
                        Source="/Images/point_icon.png"
                        x:Name="setIndexButton"
                        MouseDown="AddPoints_Event"
-                       Grid.Column="1" Margin="0,0,95,20"/>
-            <!-->
-            <Image Source="/Images/left_icon.png"
-                       Height="75"
-                       Width="75"
-                       Margin="0,10,0,10"
-                       MouseDown="MoveLeft"/>
+                       Grid.Column="1" />
 
-            <Image Source="/Images/right_icon.png"
-                       Height="75"
-                       Width="75"
-                       Margin="0,10,0,10"
-                       MouseDown="MoveRight"/>
-            <-->
             <Image Source="/Images/bin_icon.png"
                        Height="50"
                        Width="50"
                        MouseDown="RemoveImage"
-                       Grid.Column="1" Margin="210,0,0,20"/>
+                       Grid.Column="1" />
 
             <Image Source="/Images/download_button_icon.png"
                        Height="50"
                        Width="50"
-                       Grid.Column="1" Margin="-420,0,0,20"/>
+                       Grid.Column="1" />
 
             <Image Source="/Images/upload_button_icon.png"
                        Height="50"
                        Width="50"
-                       Grid.Column="1" Margin="-725,0,0,20"/>
+                       Grid.Column="1"/>
+            <-->
 
-            
             <!--> Function buttons <-->
             <StackPanel Orientation="Vertical"
                     Grid.Column="2" Grid.Row="1"
                         Background="#f9f9f9">
-                
+
                 <Canvas IsHitTestVisible="False"
                         Name="MagnifierPanel">
                     <Border BorderBrush="Black" 
@@ -257,7 +292,7 @@
                           Stroke="Black"
                           StrokeThickness="2"
                           StrokeDashArray="1, 3"/>
-                    
+
                 </Canvas>
 
             </StackPanel>
@@ -328,8 +363,8 @@
                                Height="700"
                                Stretch="Uniform"
                                MouseLeftButtonDown="SetIndex"/>
-                              <!-- MouseMove="UserImage_MouseMove" MouseEnter="UserImage_MouseEnter" MouseLeave="UserImage_MouseLeave"-->
-                               
+                        <!-- MouseMove="UserImage_MouseMove" MouseEnter="UserImage_MouseEnter" MouseLeave="UserImage_MouseLeave"-->
+
 
                     </Canvas>
                 </local:ZoomBorder>

@@ -68,14 +68,14 @@ namespace CharacteristicPoints.XML
                 }
             }
 
-            File.WriteAllText(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "src/" + fileName + ".csv"), result);
+            File.WriteAllText(fileName, result);
         }
 
         public void SaveToXml(string fileName, List<ImageToIndex> ListOfImages)
         {
             var xmlFile = Save(fileName, ListOfImages);
 
-            xmlFile.Save(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "src/" + fileName + ".xml"));
+            xmlFile.Save(fileName);
         }
     }
 }

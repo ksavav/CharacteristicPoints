@@ -26,7 +26,7 @@ namespace CharacteristicPoints
         bool moveFlag = false;
         Ellipse movingDot;
         int _currentImage = 0;
-        int maxSizeOfImageGallery = 9;
+        int maxSizeOfImageGallery = 8;
         double Xproportion;
         double Yproportion;
         double widthAdjustment;
@@ -39,7 +39,7 @@ namespace CharacteristicPoints
             Loaded += (x, y) => Keyboard.Focus(canvas1);
         }
 
-        private void ExitButton(object sender, RoutedEventArgs e)
+        private void ExitButton(object sender, MouseButtonEventArgs e)
         {
             Close();
         }
@@ -94,8 +94,6 @@ namespace CharacteristicPoints
         {
             VistaFolderBrowserDialog dialog = new VistaFolderBrowserDialog();
 
-            
-
             if ((bool)dialog.ShowDialog(this))
             {
                 var files = Directory.EnumerateFiles(dialog.SelectedPath, "*.*", SearchOption.AllDirectories)
@@ -143,7 +141,7 @@ namespace CharacteristicPoints
             else if (ListOfImages.Count > maxSizeOfImageGallery && _currentImage > ListOfImages.Count - 4) 
                 CreateImageList(ListOfImages.Count - maxSizeOfImageGallery, ListOfImages.Count);
 
-            else CreateImageList(_currentImage - 3, _currentImage + 4);
+            else CreateImageList(_currentImage - 4, _currentImage + 4);
         }
 
         public void CreateImageList(int starting_point, int ending_point)
@@ -185,8 +183,8 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
             flag = false;
-            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon.png");
-            setIndexButton.Source = new BitmapImage(new Uri(path));
+            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
+            setIndexButton.ImageSource = new BitmapImage(new Uri(path));
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
@@ -203,8 +201,8 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
             flag = false;
-            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon.png");
-            setIndexButton.Source = new BitmapImage(new Uri(path));
+            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
+            setIndexButton.ImageSource = new BitmapImage(new Uri(path));
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
@@ -219,7 +217,7 @@ namespace CharacteristicPoints
             }
         }
 
-        private void RemoveImage(object sender, MouseButtonEventArgs e)
+        private void RemoveImage(object sender, RoutedEventArgs e)
         {
             int x = _currentImage;
             if (ListOfImages.Count > 1)
@@ -259,31 +257,33 @@ namespace CharacteristicPoints
 
             listOfPoints.Children.Clear();
             RemoveDots(_currentImage);
-
-            for (int i = 0; i < ListOfImages[_currentImage].Points.Count; i++)
+            if(ListOfImages[_currentImage].Points.Count != 0)
             {
-                if (i == 0)
+                for (int i = 0; i < ListOfImages[_currentImage].Points.Count; i++)
                 {
-                    TextBlock lable = new TextBlock
+                    if (i == 0)
                     {
-                        Text = "Points list:", // + UserImage.Height.ToString() + UserImage.Width.ToString(),
-                        Margin = new Thickness(10, 10, 0, 10),
-                        FontFamily = new FontFamily("#Roboto"),
-                        FontSize = 20
-                    };
+                        TextBlock lable = new TextBlock
+                        {
+                            Text = "Points list:", // + UserImage.Height.ToString() + UserImage.Width.ToString(),
+                            Margin = new Thickness(10, 10, 0, 10),
+                            FontFamily = new FontFamily("#Roboto"),
+                            FontSize = 20
+                        };
 
-                    listOfPoints.Children.Add(lable);
+                        listOfPoints.Children.Add(lable);
+                    }
+
+                    canvas1.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointDots[i]);
+                    listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointTexts[i]);
+                    listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointCoordinates[i]);
+                    listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.delButtons[i]);
+                    listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.renameButtons[i]);
                 }
-
-                canvas1.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointDots[i]);
-                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointTexts[i]);
-                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.pointCoordinates[i]);
-                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.delButtons[i]);
-                listOfPoints.Children.Add(ListOfImages[_currentImage].PointsOfImage.renameButtons[i]);
-            }   
+            }
         }       
 
-        public void CreatePointsList(Point coordinates)
+        public void CreatePointsList(Point coordinates) 
         {
             PlaceHolder.Visibility = Visibility.Hidden;
 
@@ -383,7 +383,7 @@ namespace CharacteristicPoints
             }
         }
 
-        private void AddPoints_Event(object sender, MouseButtonEventArgs e)
+        private void AddPoints_Event(object sender, RoutedEventArgs e)
         {
             AddPoints();
         }
@@ -393,18 +393,18 @@ namespace CharacteristicPoints
             if (flag == false)
             {
                 flag = true;
-                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_red.png");
-                setIndexButton.Source = new BitmapImage(new Uri(path));
+                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text_red.png");
+                setIndexButton.ImageSource = new BitmapImage(new Uri(path));
             }
             else
             {
                 flag = false;
-                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon.png");
-                setIndexButton.Source = new BitmapImage(new Uri(path));
+                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
+                setIndexButton.ImageSource = new BitmapImage(new Uri(path));
             }
         }
 
-        private string GetNameForFile()
+        /*private string GetNameForFile()
         {
             var dialog = new UserInputXmlCsvName();
             var fileName = "temp";
@@ -414,18 +414,36 @@ namespace CharacteristicPoints
             }
 
             return fileName;
-        }
+        }*/
 
         private void SerializeToXml(object sender, RoutedEventArgs e)
         {
-            var ser = new Serializer();
-            ser.SaveToXml(GetNameForFile(), ListOfImages);
+            var fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "xml file (*.xml)|*.xml";
+            fileDialog.FilterIndex = 1;
+            fileDialog.InitialDirectory = @"C:\";
+            bool? res = fileDialog.ShowDialog();
+
+            if (res.HasValue && res.Value)
+            {
+                var ser = new Serializer();
+                ser.SaveToXml(fileDialog.FileName, ListOfImages);
+            }
         }
 
         private void SerializeToCsv(object sender, RoutedEventArgs e)
         {
-            var ser = new Serializer();
-            ser.SaveToCsv(GetNameForFile(), ListOfImages);
+            var fileDialog = new SaveFileDialog();
+            fileDialog.Filter = "csv file (*.csv)|*.csv";
+            fileDialog.FilterIndex = 1;
+            fileDialog.InitialDirectory = @"C:\";
+            bool? res = fileDialog.ShowDialog();
+
+            if (res.HasValue && res.Value)
+            {
+                var ser = new Serializer();
+                ser.SaveToCsv(fileDialog.FileName, ListOfImages);
+            }
         }
 
         private void DeserializeFromXml(object sender, RoutedEventArgs e)
@@ -515,7 +533,7 @@ namespace CharacteristicPoints
         {
             double canvasWidth;
             double canvasHeight;
-            if (ListOfImages[_currentImage].ImageWidth > ListOfImages[_currentImage].ImageHeight)
+            if (ListOfImages[_currentImage].ImageWidth / ListOfImages[_currentImage].ImageHeight > UserImage.Width / UserImage.Height)
             {
                 canvasWidth = UserImage.Width;
                 canvasHeight = ListOfImages[_currentImage].ImageHeight / (ListOfImages[_currentImage].ImageWidth / UserImage.Width);
@@ -531,7 +549,7 @@ namespace CharacteristicPoints
                     ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
                     Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
-                    PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + (UserImage.Height - canvasHeight) / 2), _currentImage);
+                    PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + widthAdjustment), _currentImage);
                 }
             }
 
@@ -551,7 +569,7 @@ namespace CharacteristicPoints
                     ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
                     Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
-                    PointVizualization(new Point(pointFromCanvas.X + (UserImage.Width - canvasWidth) / 2, pointFromCanvas.Y), _currentImage);
+                    PointVizualization(new Point(pointFromCanvas.X + heighAdjustment, pointFromCanvas.Y), _currentImage);
                 }
             } 
         }
@@ -560,7 +578,7 @@ namespace CharacteristicPoints
         {
             var ellipse = new Ellipse()
             {
-                Name = ListOfImages[image].PointsOfImage.pointTexts[ListOfImages[image].PointsOfImage.pointDots.Count].Text,
+                Name = String.Concat(ListOfImages[image].PointsOfImage.pointTexts[ListOfImages[image].PointsOfImage.pointDots.Count].Text.Where(c => !Char.IsWhiteSpace(c))),
                 Width = 5,
                 Height = 5,
                 Fill = Brushes.Red,
@@ -580,19 +598,19 @@ namespace CharacteristicPoints
         {
             double canvasWidth;
             double canvasHeight;
-            if (ListOfImages[image].ImageWidth > ListOfImages[image].ImageHeight)
+            if (ListOfImages[image].ImageWidth / ListOfImages[image].ImageHeight > UserImage.Width/ UserImage.Height)
             {
                 canvasWidth = UserImage.Width;
                 canvasHeight = ListOfImages[image].ImageHeight / (ListOfImages[image].ImageWidth / UserImage.Width);
 
-                Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
-                Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
+                Xproportion = ListOfImages[image].ImageWidth / canvasWidth;
+                Yproportion = ListOfImages[image].ImageHeight / canvasHeight;
 
-                widthAdjustment = (UserImage.Height - canvasHeight) / 2;
-                heighAdjustment = 0;
+                widthAdjustment = 0;
+                heighAdjustment = (UserImage.Height - canvasHeight) / 2;
 
-                PointVizualization(new Point(pointOnImage.X / (ListOfImages[image].ImageWidth / UserImage.Width),
-                    pointOnImage.Y / (ListOfImages[image].ImageHeight / UserImage.Height) + (UserImage.Height - canvasHeight)/2), image);
+                PointVizualization(new Point(pointOnImage.X / Xproportion,
+                    pointOnImage.Y / Yproportion + heighAdjustment), image);
             }
 
             else
@@ -600,14 +618,14 @@ namespace CharacteristicPoints
                 canvasHeight = UserImage.Height;
                 canvasWidth = ListOfImages[image].ImageWidth / (ListOfImages[image].ImageHeight / UserImage.Height);
 
-                Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
-                Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
+                Xproportion = ListOfImages[image].ImageWidth / canvasWidth;
+                Yproportion = ListOfImages[image].ImageHeight / canvasHeight;
 
-                widthAdjustment = 0;
-                heighAdjustment = (UserImage.Width - canvasWidth) / 2;
+                widthAdjustment = (UserImage.Width - canvasWidth) / 2;
+                heighAdjustment = 0;
 
-                PointVizualization(new Point(pointOnImage.X / (ListOfImages[image].ImageWidth / UserImage.Width) + (UserImage.Width - canvasWidth)/2,
-                    pointOnImage.Y / (ListOfImages[image].ImageHeight / UserImage.Height)), image);
+                PointVizualization(new Point(pointOnImage.X / Xproportion + widthAdjustment,
+                    pointOnImage.Y / Yproportion), image);
             }
         }
 
@@ -615,6 +633,7 @@ namespace CharacteristicPoints
         {
             if (e.ClickCount == 2 && moveFlag == false)
             {
+                GetRealPoint(new Point(-1, -1));
                 Ellipse srcDot = e.Source as Ellipse;
                 srcDot.Fill = Brushes.Green;
                 moveFlag = true;
@@ -743,9 +762,8 @@ namespace CharacteristicPoints
                 }
             }
         }
-
-        /* TODO
-         * uporzatkowanie kodu
-         */
     }
+
+    /* jak się wczytuje xmlke to żeby jak nie wczyta jakiegoś zdjęcia to żeby wyjebało error */
+
 }
