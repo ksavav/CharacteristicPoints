@@ -89,7 +89,6 @@
                               Stroke="Black"
                               StrokeThickness="2"/>
                     </Canvas>
-
                     <MenuItem Width="150"
                               Height="70"
                               FontSize="20"
@@ -102,6 +101,7 @@
                             <TextBlock Text="Add Point" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="23,40,0,-10"/>
                         </MenuItem.Header>
                     </MenuItem>
+                    
                     <MenuItem Width="150"
                               Height="70"
                               FontSize="20"
@@ -116,7 +116,13 @@
                     </MenuItem>
                 </Menu>
             </Border>
-
+            <Image Grid.Column="1"
+                   Width="150"
+                   Height="68"
+                   Source="/Images/point_icon_text_red.png"
+                   Margin="0,0,92,0"
+                   Visibility="Hidden"
+                   x:Name="AddPointActive"/>
             <!-- 
             <StackPanel Grid.Row="1">
                 <RadioButton Content="Upload"
@@ -236,33 +242,8 @@
                    Margin="0,10,0,10"
                    MouseDown="MoveRight"/>
 
-            <!-->
-            <Image Width="50"
-                       Height="50"
-                       Source="/Images/point_icon.png"
-                       x:Name="setIndexButton"
-                       MouseDown="AddPoints_Event"
-                       Grid.Column="1" />
-
-            <Image Source="/Images/bin_icon.png"
-                       Height="50"
-                       Width="50"
-                       MouseDown="RemoveImage"
-                       Grid.Column="1" />
-
-            <Image Source="/Images/download_button_icon.png"
-                       Height="50"
-                       Width="50"
-                       Grid.Column="1" />
-
-            <Image Source="/Images/upload_button_icon.png"
-                       Height="50"
-                       Width="50"
-                       Grid.Column="1"/>
-            <-->
-
             <!--> Function buttons <-->
-            <StackPanel Orientation="Vertical"
+            <StackPanel Orientation="Horizontal"
                     Grid.Column="2" Grid.Row="1"
                         Background="#f9f9f9">
 
@@ -295,6 +276,13 @@
 
                 </Canvas>
 
+                <Image Source="Images/zoom_icon.png"
+                       Width="100"
+                       Margin="50,0,0,0"
+                       MouseDown="ZoomMagnifier"/>
+                <Image Source="Images/unzoom_icon.png"
+                       Width="100"
+                       MouseDown="UnzoomMagnifier"/>
             </StackPanel>
 
             <!--> Points List <-->

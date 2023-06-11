@@ -8,40 +8,33 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Images\bin_icon.png" />
     <None Remove="Images\bin_icon.svg" />
     <None Remove="Images\bin_icon_text.png" />
     <None Remove="Images\close_button.png" />
-    <None Remove="Images\download_button_icon.png" />
     <None Remove="Images\download_button_icon_text.png" />
-    <None Remove="Images\exit_button.png" />
     <None Remove="Images\left_icon.png" />
     <None Remove="Images\left_icon.svg" />
     <None Remove="Images\left_triangle_icon.png" />
     <None Remove="Images\logo_eti.png" />
     <None Remove="Images\minus_icon.png" />
     <None Remove="Images\plus_icon.png" />
-    <None Remove="Images\point_icon.png" />
     <None Remove="Images\point_icon.svg" />
-    <None Remove="Images\point_icon_red.png" />
     <None Remove="Images\point_icon_text.png" />
     <None Remove="Images\point_icon_text_red.png" />
     <None Remove="Images\right_icon.png" />
     <None Remove="Images\right_icon.svg" />
     <None Remove="Images\right_triangle_icon.png" />
     <None Remove="Images\test.jpg" />
-    <None Remove="Images\upload_button_icon.png" />
+    <None Remove="Images\unzoom_icon.png" />
     <None Remove="Images\upload_button_icon_text.png" />
     <None Remove="Images\upload_icon.png" />
+    <None Remove="Images\zoom_icon.png" />
   </ItemGroup>
 
   <ItemGroup>
     <Resource Include="Images\bin_icon_text.png" />
     <Resource Include="Images\close_button.png" />
-    <Resource Include="Images\download_button_icon.png" />
     <Resource Include="Images\download_button_icon_text.png" />
-    <Resource Include="Images\exit_button.png" />
-    <Resource Include="Images\point_icon_red.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -53,16 +46,15 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Images\bin_icon.png" />
     <Resource Include="Images\left_icon.png" />
     <Resource Include="Images\logo_eti.png" />
-    <Resource Include="Images\point_icon.png" />
     <Resource Include="Images\point_icon_text.png" />
     <Resource Include="Images\point_icon_text_red.png" />
     <Resource Include="Images\right_icon.png" />
-    <Resource Include="Images\upload_button_icon.png" />
+    <Resource Include="Images\unzoom_icon.png" />
     <Resource Include="Images\upload_button_icon_text.png" />
     <Resource Include="Images\upload_icon.png" />
+    <Resource Include="Images\zoom_icon.png" />
   </ItemGroup>
 
   <ItemGroup>

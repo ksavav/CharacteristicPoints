@@ -33,42 +33,24 @@ namespace CharacteristicPoints.XML
 
         public void SaveToCsv(string fileName, List<ImageToIndex> ListOfImages)
         {
-            var xmlToCsv = Save(fileName, ListOfImages);
-            xmlToCsv.Save("temp.xml");
-            /*StringBuilder csvFile = new StringBuilder();
+            StringBuilder csvFile = new StringBuilder();
 
-            foreach(XElement el in xmlToCsv.Elements())
+            csvFile.AppendLine("File path,Point name,X,Y");
+
+            foreach(ImageToIndex image in ListOfImages)
             {
-                foreach(XElement el2 in el.Elements())
-                {
-                    var lines = from d in el2.Elements()
-                                let line = string.Join(",", d.Elements().Select(e => e.Value))
-                                select line;
+                var lines = from el in image.PointsOfImage.pointTexts
+                let line = image.Image.ToString() + "," + el.Text.ToString() + "," + 
+                Math.Round(image.Points[image.PointsOfImage.pointTexts.FindIndex(a => a.Name == el.Name)].X, 0).ToString() + "," +
+                Math.Round(image.Points[image.PointsOfImage.pointTexts.FindIndex(a => a.Name == el.Name)].Y, 0).ToString()
+                select line;
 
-                    csvFile.Append(string.Join(Environment.NewLine, lines));
-                }
-                
-            }
-            
-            System.IO.File.WriteAllText(Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, fileName + ".csv"), csvFile.ToString());*/
-            string result = string.Empty;
-            var xpathDoc = new XPathDocument("xd.xml");
-            var xsltTransform = new System.Xml.Xsl.XslCompiledTransform();
-            xsltTransform.Load("data.xsl");
+                if (string.Join("", lines) == "") lines = new List<string>() { image.Image.ToString() };
 
-            using (MemoryStream ms = new MemoryStream())
-            {
-                var writer = new XmlTextWriter(ms, Encoding.UTF8);
-                using (var rd = new StreamReader(ms))
-                {
-                    var argList = new System.Xml.Xsl.XsltArgumentList();
-                    xsltTransform.Transform(xpathDoc, argList, writer);
-                    ms.Position = 0;
-                    result = rd.ReadToEnd();
-                }
+                csvFile.Append(string.Join(Environment.NewLine, lines) + '\n');
             }
 
-            File.WriteAllText(fileName, result);
+            System.IO.File.WriteAllText(fileName, csvFile.ToString());
         }
 
         public void SaveToXml(string fileName, List<ImageToIndex> ListOfImages)

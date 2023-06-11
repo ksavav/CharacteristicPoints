@@ -10,11 +10,11 @@ none
 false
 TRACE;DEBUG;NET;NET6_0;NETCOREAPP
 E:\Programowanie\CSharp\CharacteristicPoints\App.xaml
-81030939783
+9-242312354
 
-13-288430216
+1426280764
 204-1980155781
-DialogWindow\UserInput.xaml;DialogWindow\UserInputXmlCsvName.xaml;MainWindow.xaml;Theme\MenuButtonTheme.xaml;Theme\MenuLableTheme.xaml;Theme\MenuUpload.xaml;Theme\PointButtonTheme.xaml;Theme\UploadButtonTheme.xaml;
+DialogWindow\ErrorMessage.xaml;DialogWindow\UserInput.xaml;DialogWindow\UserInputXmlCsvName.xaml;MainWindow.xaml;Theme\MenuButtonTheme.xaml;Theme\MenuLableTheme.xaml;Theme\MenuUpload.xaml;Theme\PointButtonTheme.xaml;Theme\UploadButtonTheme.xaml;
 
-False
+True
 

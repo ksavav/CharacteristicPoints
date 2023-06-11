@@ -32,3 +32,5 @@ E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWind
 E:\Programowanie\CSharp\CharacteristicPoints\bin\Debug\net6.0-windows\Ookii.Dialogs.Wpf.dll
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\CharacteristicPoints.csproj.CopyComplete
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\MenuUpload.baml
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\ErrorMessage.g.cs
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\ErrorMessage.baml

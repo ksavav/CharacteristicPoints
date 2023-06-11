@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Shapes;
 using Ookii.Dialogs.Wpf;
 using System.Runtime.InteropServices;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.Window;
 
 namespace CharacteristicPoints
 {
@@ -52,6 +53,7 @@ namespace CharacteristicPoints
         private void UserImage_MouseMove(object sender, MouseEventArgs e)
         {
             Point center = e.GetPosition(canvas1);
+
             double length = MagnifierRectangle.ActualWidth * factor;
             double radius = length / 2;
             Rect viewboxRect = new Rect(center.X - radius, center.Y - radius, length, length);
@@ -183,8 +185,9 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
             flag = false;
-            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
-            setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+            //string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
+            //setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+            AddPointActive.Visibility= Visibility.Hidden;
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
@@ -201,8 +204,9 @@ namespace CharacteristicPoints
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
             flag = false;
-            string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
-            setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+            //string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
+            //setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+            AddPointActive.Visibility = Visibility.Hidden;
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
@@ -393,28 +397,18 @@ namespace CharacteristicPoints
             if (flag == false)
             {
                 flag = true;
-                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text_red.png");
-                setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+                //string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text_red.png");
+                //setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+                AddPointActive.Visibility = Visibility.Visible;
             }
             else
             {
                 flag = false;
-                string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
-                setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+                //string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
+                //setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+                AddPointActive.Visibility = Visibility.Hidden;
             }
         }
-
-        /*private string GetNameForFile()
-        {
-            var dialog = new UserInputXmlCsvName();
-            var fileName = "temp";
-            if (dialog.ShowDialog() == true)
-            {
-                fileName = dialog.NewNameForPoint;
-            }
-
-            return fileName;
-        }*/
 
         private void SerializeToXml(object sender, RoutedEventArgs e)
         {
@@ -515,7 +509,11 @@ namespace CharacteristicPoints
                 }
                 catch(Exception e)
                 {
-
+                    var error = new ErrorMessage(list[i][0].ToString());
+                    error.ShowError();
+                    if (error.ShowDialog() == true)
+                    {
+                    }
                 }
             }
 
@@ -724,28 +722,28 @@ namespace CharacteristicPoints
                         case Key.Left:
                             if (point.X - 1 >= 0)
                             {
-                                point.X -= 1 / Xproportion;
+                                point.X -= 1;
                             };
                             break;
 
                         case Key.Right:
                             if (ListOfImages[_currentImage].ImageWidth >= point.X + 1)
                             {
-                                point.X += 1 / Xproportion;
+                                point.X += 1;
                             };
                             break;
 
                         case Key.Down:
                             if (ListOfImages[_currentImage].ImageHeight >= point.Y + 1)
                             {
-                                point.Y += 1 / Yproportion;
+                                point.Y += 1;
                             };
                             break;
 
                         case Key.Up:
                             if (point.Y - 1 >= 0)
                             {
-                                point.Y -= 1 / Yproportion;
+                                point.Y -= 1;
                             };
                             break;
 
@@ -756,14 +754,42 @@ namespace CharacteristicPoints
                         case Key.F:
                             AddPoints();
                             break;
+
+                        case Key.OemPlus:
+                            ZoomingMagnifier(true);
+                            break;
+
+                        case Key.OemMinus:
+                            ZoomingMagnifier(false);
+                            break;
                     }
 
                     SetCursorPos((int)point.X + xL, (int)point.Y +yT);
                 }
             }
         }
+
+        private void ZoomMagnifier(object sender, MouseButtonEventArgs e)
+        {
+            ZoomingMagnifier(true);
+        }
+
+        private void UnzoomMagnifier(object sender, MouseButtonEventArgs e)
+        {
+            ZoomingMagnifier(false);
+        }
+
+        public void ZoomingMagnifier(bool x)
+        {
+            if(x == true)
+            {
+                if (factor > 0.1) factor -= 0.05;
+            }
+
+            else
+            {
+                if (factor < 0.5) factor += 0.05;
+            }
+        }
     }
-
-    /* jak się wczytuje xmlke to żeby jak nie wczyta jakiegoś zdjęcia to żeby wyjebało error */
-
 }
