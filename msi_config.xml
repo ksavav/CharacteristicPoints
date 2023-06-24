@@ -1,0 +1,13 @@
+<Points>
+	<NumberOfPoints>8</NumberOfPoints>
+	<PointsNames>
+		<PointName>LeftTop</PointName>
+		<PointName>RightTop</PointName>
+		<PointName>RightBottom</PointName>
+		<PointName>LeftBottom</PointName>
+		<PointName>Center</PointName>
+		<PointName>SomeThing1</PointName>
+		<PointName>SomeThing2</PointName>
+		<PointName>SomeThing3</PointName>
+	</PointsNames>
+</Points>

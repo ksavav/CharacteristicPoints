@@ -28,6 +28,8 @@ namespace CharacteristicPoints
         Ellipse movingDot;
         int _currentImage = 0;
         int maxSizeOfImageGallery = 8;
+        int pointsCount = 0;
+        public List<string> PointsNames = new List<string>();
         double Xproportion;
         double Yproportion;
         double widthAdjustment;
@@ -461,6 +463,27 @@ namespace CharacteristicPoints
             }
         }
 
+        private void DeserializeFromXmlConfig(object sender, RoutedEventArgs e)
+        {
+            var deser = new ConfigDeserializer();
+
+            OpenFileDialog od = new OpenFileDialog();
+            od.Filter = "Image files|*.xml";
+            od.FilterIndex = 1;
+            var path = "";
+
+            if (od.ShowDialog() == true)
+            {
+                path = od.FileName;
+            }
+
+            if (od.FileName != "")
+            {
+                var config = deser.Load(path);
+                GetPointsNumberAndNames(config);
+            }
+        }
+
         private void CreateImagesFromXmlFile(List<List<string>> list)
         {
             if(ListOfImages.Count != 0)
@@ -526,6 +549,33 @@ namespace CharacteristicPoints
             DisplayPointsList();
         }
 
+        private void GetPointsNumberAndNames(List<List<string>> list)
+        {
+            try
+            {
+                pointsCount = Int32.Parse(list[0][0]);
+
+                int count = 0;
+                foreach (var name in list[1])
+                {
+                    PointsNames.Add(name);
+                    count++;
+                }
+
+                if (count != pointsCount)
+                {
+                    throw new Exception("Bad Config");
+                }
+            }
+            catch (Exception e)
+            {
+                var error = new ErrorMessage("Config");
+                error.ShowError();
+                if (error.ShowDialog() == true)
+                {
+                }
+            }
+        }
         
         public void GetRealPoint(Point pointFromCanvas)
         {
@@ -747,7 +797,7 @@ namespace CharacteristicPoints
                             };
                             break;
 
-                        case Key.P:
+                        case Key.Enter:
                             if(flag) CreatePointsList(point_on_canvas);
                             break;
 

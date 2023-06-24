@@ -1,13 +1,10 @@
 {
   "version": 2,
-  "dgSpecHash": "uDdjxucJ7X3mFa9sSEPczM09sd4oNL5ujfPwnrBqsPOmSk8r5ZrHJi7fKm0QPKmc3YBB815uiFPcYSQFSrZzWA==",
+  "dgSpecHash": "9HS/RnPj5gnlOSfS7LLqbMF5PJBBs4/xw/qcIxuWL9XDd+VtIonOzZTMsBoRQn/imLOfZPXbxWbqm0pLwS0Nvg==",
   "success": true,
   "projectFilePath": "E:\\Programowanie\\CSharp\\CharacteristicPoints\\CharacteristicPoints.csproj",
   "expectedPackageFiles": [
-    "C:\\Users\\xawer\\.nuget\\packages\\ookii.dialogs.wpf\\5.0.1\\ookii.dialogs.wpf.5.0.1.nupkg.sha512",
-    "C:\\Users\\xawer\\.nuget\\packages\\microsoft.netcore.app.runtime.win-x64\\6.0.11\\microsoft.netcore.app.runtime.win-x64.6.0.11.nupkg.sha512",
-    "C:\\Users\\xawer\\.nuget\\packages\\microsoft.windowsdesktop.app.runtime.win-x64\\6.0.11\\microsoft.windowsdesktop.app.runtime.win-x64.6.0.11.nupkg.sha512",
-    "C:\\Users\\xawer\\.nuget\\packages\\microsoft.aspnetcore.app.runtime.win-x64\\6.0.11\\microsoft.aspnetcore.app.runtime.win-x64.6.0.11.nupkg.sha512"
+    "C:\\Users\\xawer\\.nuget\\packages\\ookii.dialogs.wpf\\5.0.1\\ookii.dialogs.wpf.5.0.1.nupkg.sha512"
   ],
   "logs": []
 }

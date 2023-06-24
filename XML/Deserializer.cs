@@ -12,7 +12,7 @@ using System.Xml.XPath;
 
 namespace CharacteristicPoints.XML
 {
-    public class Deserializer
+    public class Deserializer : IXmlDeserializer
     {
         public List<List<string>> Load(string path)
         {

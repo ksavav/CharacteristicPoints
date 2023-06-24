@@ -68,6 +68,7 @@
                         <MenuItem Header="Image" Click="UploadImage"/>
                         <MenuItem Header="Folder" Click="UploadFolder"/>
                         <MenuItem Header="XML file" Click="DeserializeFromXml"/>
+                        <MenuItem Header="XML config" Click="DeserializeFromXmlConfig"/>
                     </MenuItem>
                     <MenuItem Width="150"
                               Height="70"
