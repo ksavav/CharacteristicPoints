@@ -25,10 +25,12 @@ namespace CharacteristicPoints
         public List<ImageToIndex> ListOfImages = new List<ImageToIndex>();
         bool flag = false;
         bool moveFlag = false;
+        bool configFlag = false;
         Ellipse movingDot;
         int _currentImage = 0;
         int maxSizeOfImageGallery = 8;
         int pointsCount = 0;
+        Point magnifierCeter;
         public List<string> PointsNames = new List<string>();
         double Xproportion;
         double Yproportion;
@@ -55,8 +57,14 @@ namespace CharacteristicPoints
         private void UserImage_MouseMove(object sender, MouseEventArgs e)
         {
             Point center = e.GetPosition(canvas1);
+            //Point center = e.GetPosition(UserImage);
+            magnifierCeter = center;
+            UserImage_event(magnifierCeter);
+        }
 
-            double length = MagnifierRectangle.ActualWidth * factor;
+        private void UserImage_event(Point center)
+        {
+            double length = MagnifierRectangle.ActualWidth * 1 / Xproportion;
             double radius = length / 2;
             Rect viewboxRect = new Rect(center.X - radius, center.Y - radius, length, length);
             MagnifierBrush.Viewbox = viewboxRect;
@@ -186,17 +194,16 @@ namespace CharacteristicPoints
                 _currentImage--;
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
-            flag = false;
-            //string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
-            //setIndexButton.ImageSource = new BitmapImage(new Uri(path));
-            AddPointActive.Visibility= Visibility.Hidden;
+
+            AddPointActive.Visibility = Visibility.Hidden;
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
             DisplayPointsList();
+            GetRealPoint(new Point(-1, -1));
         }
 
-        private void MoveRight(object sender, MouseButtonEventArgs e)
+        private void Move()
         {
             int x = _currentImage;
 
@@ -205,14 +212,18 @@ namespace CharacteristicPoints
                 _currentImage++;
                 UserImage.Source = ListOfImages[_currentImage].Image;
             }
-            flag = false;
-            //string path = System.IO.Path.Combine(Directory.GetParent(Environment.CurrentDirectory).Parent.Parent.FullName, "Images/point_icon_text.png");
-            //setIndexButton.ImageSource = new BitmapImage(new Uri(path));
+
             AddPointActive.Visibility = Visibility.Hidden;
             moveFlag = false;
             RemoveDots(x);
             CreateImageList_event();
             DisplayPointsList();
+            GetRealPoint(new Point(-1, -1));
+        }
+
+        private void MoveRight(object sender, MouseButtonEventArgs e)
+        {
+            Move();
         }
 
         private void RemoveDots(int x)
@@ -295,12 +306,24 @@ namespace CharacteristicPoints
 
             var new_point = ListOfImages[_currentImage].Points.Count;
 
-            ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(pointNameTextBlockCreator("Point" + (new_point + 1).ToString()));
+            if (configFlag && ListOfImages[_currentImage].Points.Count < pointsCount)
+            {
+                ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(pointNameTextBlockCreator(PointsNames[ListOfImages[_currentImage].Points.Count]));
+            }
+            else
+            {
+                ListOfImages[_currentImage].PointsOfImage.pointTexts.Add(pointNameTextBlockCreator("Point" + (new_point + 1).ToString()));
+            }
             GetRealPoint(coordinates);
             ListOfImages[_currentImage].PointsOfImage.pointCoordinates.Add(coordsTextBlockCreator(Math.Round(ListOfImages[_currentImage].Points[new_point].X, 0), Math.Round(ListOfImages[_currentImage].Points[new_point].Y, 0)));
             ListOfImages[_currentImage].PointsOfImage.delButtons.Add(pointDelButtonCreator(new_point + 1));
             ListOfImages[_currentImage].PointsOfImage.renameButtons.Add(pointRenameButtonCreator(new_point + 1));
             DisplayPointsList();
+
+            if (ListOfImages[_currentImage].Points.Count == pointsCount)
+            {
+                Move();
+            }
         }
 
         public TextBlock coordsTextBlockCreator(double x, double y)
@@ -458,8 +481,22 @@ namespace CharacteristicPoints
 
             if(od.FileName != "")
             {
-                var images_from_xml = deser.Load(path);
-                CreateImagesFromXmlFile(images_from_xml);
+                try
+                {
+                    var images_from_xml = deser.Load(path);
+                    CreateImagesFromXmlFile(images_from_xml);
+                }
+                catch(Exception ex)
+                {
+                    if(ex is ArgumentOutOfRangeException)
+                    {
+                        var error = new ErrorMessage("XML file");
+                        error.ShowError();
+                        if (error.ShowDialog() == true)
+                        {
+                        }
+                    }
+                }
             }
         }
 
@@ -477,11 +514,30 @@ namespace CharacteristicPoints
                 path = od.FileName;
             }
 
-            if (od.FileName != "")
+            try
             {
-                var config = deser.Load(path);
-                GetPointsNumberAndNames(config);
+                if (od.FileName != "")
+                {
+                    var config = deser.Load(path);
+                    GetPointsNumberAndNames(config);
+                }
+
+                configFlag = true;
+
+                var success = new Success();
+                if (success.ShowDialog() == true)
+                {
+                }
             }
+            catch
+            {
+                var error = new ErrorMessage("Config");
+                error.ShowError();
+                if (error.ShowDialog() == true)
+                {
+                }
+            }
+            
         }
 
         private void CreateImagesFromXmlFile(List<List<string>> list)
@@ -551,29 +607,19 @@ namespace CharacteristicPoints
 
         private void GetPointsNumberAndNames(List<List<string>> list)
         {
-            try
+
+            pointsCount = Int32.Parse(list[0][0]);
+            int count = 0;
+
+            foreach (var name in list[1])
             {
-                pointsCount = Int32.Parse(list[0][0]);
-
-                int count = 0;
-                foreach (var name in list[1])
-                {
-                    PointsNames.Add(name);
-                    count++;
-                }
-
-                if (count != pointsCount)
-                {
-                    throw new Exception("Bad Config");
-                }
+                PointsNames.Add(name);
+                count++;
             }
-            catch (Exception e)
+            
+            if (count != pointsCount)
             {
-                var error = new ErrorMessage("Config");
-                error.ShowError();
-                if (error.ShowDialog() == true)
-                {
-                }
+                throw new Exception("Bad Config");
             }
         }
         
@@ -589,15 +635,15 @@ namespace CharacteristicPoints
                 Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
                 Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
 
-                widthAdjustment = (UserImage.Height - canvasHeight) / 2;
-                heighAdjustment = 0;
+                widthAdjustment = 0;
+                heighAdjustment = (UserImage.Height - canvasHeight) / 2;
 
                 if(pointFromCanvas.X != -1)
                 {
                     ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
                     Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
-                    PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + widthAdjustment), _currentImage);
+                    PointVizualization(new Point(pointFromCanvas.X, pointFromCanvas.Y + heighAdjustment), _currentImage);
                 }
             }
 
@@ -609,15 +655,15 @@ namespace CharacteristicPoints
                 Xproportion = ListOfImages[_currentImage].ImageWidth / canvasWidth;
                 Yproportion = ListOfImages[_currentImage].ImageHeight / canvasHeight;
 
-                widthAdjustment = 0;
-                heighAdjustment = (UserImage.Width - canvasWidth)/ 2;
+                widthAdjustment = (UserImage.Width - canvasWidth)/ 2;
+                heighAdjustment = 0;
 
                 if(pointFromCanvas.X != -1)
                 {
                     ListOfImages[_currentImage].Points.Add(new Point(Math.Round(pointFromCanvas.X * Xproportion, 0),
                     Math.Round(pointFromCanvas.Y * Yproportion, 0)));
 
-                    PointVizualization(new Point(pointFromCanvas.X + heighAdjustment, pointFromCanvas.Y), _currentImage);
+                    PointVizualization(new Point(pointFromCanvas.X + widthAdjustment, pointFromCanvas.Y), _currentImage);
                 }
             } 
         }
@@ -770,35 +816,40 @@ namespace CharacteristicPoints
                     switch (e.Key)
                     {
                         case Key.Left:
-                            if (point.X - 1 >= 0)
+                            if (magnifierCeter.X - 1 >= 0 + widthAdjustment)
                             {
-                                point.X -= 1;
+                                magnifierCeter.X -= 1 * 1 / Xproportion;
+                                UserImage_event(magnifierCeter);
                             };
                             break;
 
                         case Key.Right:
-                            if (ListOfImages[_currentImage].ImageWidth >= point.X + 1)
+                            if (UserImage.Width - widthAdjustment >= magnifierCeter.X + 1)
                             {
-                                point.X += 1;
+                                magnifierCeter.X += 1 * 1 / Xproportion;
+                                UserImage_event(magnifierCeter);
                             };
                             break;
 
                         case Key.Down:
-                            if (ListOfImages[_currentImage].ImageHeight >= point.Y + 1)
+                            if (UserImage.Height - heighAdjustment >= magnifierCeter.Y + 1)
                             {
-                                point.Y += 1;
+                                magnifierCeter.Y += 1 * 1 / Xproportion;
+                                UserImage_event(magnifierCeter);
                             };
                             break;
 
                         case Key.Up:
-                            if (point.Y - 1 >= 0)
+                            if (magnifierCeter.Y - 1 >= 0 + heighAdjustment)
                             {
-                                point.Y -= 1;
+                                magnifierCeter.Y -= 1 * 1 / Xproportion;
+                                UserImage_event(magnifierCeter);
+                                //point.Y -= 1;
                             };
                             break;
 
                         case Key.Enter:
-                            if(flag) CreatePointsList(point_on_canvas);
+                            if(flag) CreatePointsList(new Point(magnifierCeter.X - widthAdjustment, magnifierCeter.Y - heighAdjustment));
                             break;
 
                         case Key.F:
@@ -814,7 +865,7 @@ namespace CharacteristicPoints
                             break;
                     }
 
-                    SetCursorPos((int)point.X + xL, (int)point.Y +yT);
+                    //SetCursorPos((int)point.X + xL, (int)point.Y +yT);
                 }
             }
         }

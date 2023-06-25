@@ -34,3 +34,5 @@ E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Characteri
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\Theme\MenuUpload.baml
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\ErrorMessage.g.cs
 E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\ErrorMessage.baml
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\Success.g.cs
+E:\Programowanie\CSharp\CharacteristicPoints\obj\Debug\net6.0-windows\DialogWindow\Success.baml
