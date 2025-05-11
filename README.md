@@ -1,9 +1,12 @@
-<h2>Image indexing:</h2>
-- Arrows: move one pixel in desired direction (the move is showed on the magnifier)
+<h2>Image indexing</h2>
+
+- Arrows: move one pixel in desired direction (the move is shown on the magnifier)
 
 - F: enable point
 
 - Enter: add point
+
+- Config file: set predefined points. After adding points from config file, automatically move to the next one.
 
   
 
