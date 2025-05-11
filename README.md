@@ -2,7 +2,7 @@
 - Arrows: move one pixel in desired direction (the move is showed on the magnifier)
 
 - F: enable point
-- 
+
 - Enter: add point
 
   
